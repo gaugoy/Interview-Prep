@@ -99,7 +99,7 @@ def two_sum(nums, target):
 
 **Edge cases to test:** `[3,3], target=6` | `[1], target=1` | negative numbers
 
-**Time allocation:** 3 min understand → 5 min code → 2 min test edge cases
+**Practice Link:** https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/
 
 ---
 
@@ -132,7 +132,7 @@ def subarray_sum(nums, k):
 
 **Edge cases to test:** `k=0` | all negatives | single element equals k | `[1,-1,1], k=1`
 
-**Time allocation:** 5 min understand pattern → 10 min code from scratch → 5 min test 3 edge cases
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/
 
 ---
 
@@ -169,7 +169,7 @@ def product_except_self(nums):
 
 **Edge cases to test:** `[1,0,3,4]` | `[0,0]` | `[-1,1,-1]` | single element
 
-**Time allocation:** 5 min understand → 10 min code → 5 min test zeros edge case
+**Practice Link:** https://www.hackerearth.com/practice/data-structures/arrays/1-d/practice-problems/
 
 ---
 
@@ -208,7 +208,7 @@ def length_of_longest_substring(s):
 
 **Edge cases to test:** `""` | `"aaa"` | `"abcabc"` | single character
 
-**Time allocation:** 5 min → 10 min code → 5 min test
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/string-algorithm/basics-of-string-manipulation/practice-problems/
 
 ---
 
@@ -223,7 +223,7 @@ def group_anagrams(strs):
     
     for s in strs:
         # Sorted string is the canonical key
-        key = tuple(sorted(s))  # or ''.join(sorted(s))
+        key = tuple(sorted(s))
         anagram_map[key].append(s)
     
     return list(anagram_map.values())
@@ -242,7 +242,7 @@ key = tuple(Counter(s).items())  # or fixed 26-char frequency array
 
 **Edge cases to test:** `[""]` | `["a"]` | all same anagram | all unique
 
-**Time allocation:** 3 min → 12 min code both approaches → 5 min test
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/string-algorithm/basics-of-string-manipulation/practice-problems/
 
 ---
 
@@ -275,7 +275,7 @@ def is_valid(s):
 
 **Edge cases to test:** `""` | `"("` | `"(]"` | `"([)]"`
 
-**Time allocation:** 2 min → 6 min code → 2 min test
+**Practice Link:** https://www.hackerearth.com/practice/data-structures/stacks/basics-of-stacks/practice-problems/
 
 ---
 
@@ -311,7 +311,7 @@ def max_subarray(nums):
 
 **Edge cases to test:** `[-1,-2,-3]` | `[0,0,0]` | single element | `[-2,1,-3,4,-1,2,1,-5,4]`
 
-**Time allocation:** 3 min → 7 min code → 5 min understand the DP decision
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/
 
 ---
 
@@ -346,7 +346,7 @@ def coin_change(coins, amount):
 
 **Edge cases to test:** `amount=0` | no valid combination | single coin equals amount | `coins=[2], amount=3`
 
-**Time allocation:** 8 min understand DP table → 15 min code and trace through example → 7 min test edge cases → 5 min understand why it works
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/
 
 ---
 
@@ -398,7 +398,7 @@ def num_islands(grid):
 
 **Edge cases to test:** All water | all land | single cell | diagonal cells (not connected)
 
-**Time allocation:** 5 min understand → 15 min code BFS version → 5 min test
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/graphs/breadth-first-search/practice-problems/
 
 ---
 
@@ -437,7 +437,64 @@ def merge(intervals):
 
 **Edge cases to test:** Single interval | all overlapping | no overlapping | `[[1,4],[2,3]]` (contained)
 
-**Time allocation:** 5 min → 15 min code → 5 min test contained interval case
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/sorting/merge-sort/practice-problems/
+
+---
+
+#### ✅ Q11: Longest Increasing Subsequence (LIS) — Bonus (10 minutes review)
+
+**Why chosen:** Sequence trend analysis is core to Fractal.ai's time-series domain. Use remaining time in Hour 4 to review the O(n log n) approach.
+
+**Strategy:**
+```python
+import bisect
+
+def length_of_lis(nums):
+    tails = []
+    for num in nums:
+        pos = bisect.bisect_left(tails, num)
+        if pos == len(tails):
+            tails.append(num)
+        else:
+            tails[pos] = num
+    return len(tails)
+```
+
+**Key Concept:** `tails[i]` = smallest tail element of all increasing subsequences of length `i+1`. Binary search to find where current element fits.
+
+**Pitfalls to avoid:**
+- `tails` does NOT store the actual LIS — only its length is correct
+- Use `bisect_left` for strictly increasing; `bisect_right` for non-decreasing
+
+**Edge cases to test:** `[1,1,1]` | `[5,4,3,2,1]` | `[1]` | already sorted
+
+**Practice Link:** https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/
+
+---
+
+#### ✅ Q12: Top K Frequent Elements — Bonus (10 minutes review)
+
+**Why chosen:** Frequency ranking is the most common analytics operation. Quick review of heap pattern.
+
+**Strategy:**
+```python
+import heapq
+from collections import Counter
+
+def top_k_frequent(nums, k):
+    freq = Counter(nums)
+    return heapq.nlargest(k, freq.keys(), key=freq.get)
+```
+
+**Key Concept:** Build frequency map; use `heapq.nlargest` with frequency as key. O(n log k).
+
+**Pitfalls to avoid:**
+- `nlargest` returns keys sorted by frequency — don't sort again
+- For streaming data, maintain a min-heap of size k manually
+
+**Edge cases to test:** `k=n` | all same frequency | `k=1` | single element
+
+**Practice Link:** https://www.hackerearth.com/practice/data-structures/trees/heapspriority-queues/practice-problems/
 
 ---
 
@@ -449,7 +506,7 @@ def merge(intervals):
 
 #### 4:15–4:30 | RAPID PATTERN REVIEW (15 minutes)
 
-For each of the 10 problems solved, write ONE line summarizing the core trick:
+For each of the 12 problems, write ONE line summarizing the core trick:
 
 | Problem | One-Line Core Trick |
 |---------|-------------------|
@@ -463,6 +520,8 @@ For each of the 10 problems solved, write ONE line summarizing the core trick:
 | Coin Change | `dp[i] = min(dp[i], dp[i-coin]+1); dp[0]=0` |
 | Number of Islands | `BFS from each '1', mark visited as '0'` |
 | Merge Intervals | `sort by start; merge if start<=last_end` |
+| LIS | `bisect_left on tails array; len(tails) = LIS length` |
+| Top K Frequent | `Counter + heapq.nlargest(k, freq, key=freq.get)` |
 
 **Why this works:** Writing the trick in your own words is 3x more effective than re-reading code.
 
@@ -484,11 +543,13 @@ For each problem, mentally answer: "What happens if the input is empty?"
 | Coin Change | Return `0` if amount=0 |
 | Number of Islands | Return `0` |
 | Merge Intervals | Return `[]` |
+| LIS | Return `1` (single element) |
+| Top K Frequent | Return `[]` |
 
 **Add these guards to every solution:**
 ```python
 if not nums: return []      # arrays
-if not s: return 0          # strings  
+if not s: return 0          # strings
 if not grid: return 0       # grids
 if amount == 0: return 0    # DP
 ```
@@ -506,7 +567,7 @@ if amount == 0: return 0    # DP
 - Heap → Top K Frequent
 - BFS/DFS → Number of Islands
 - Stack → Valid Parentheses
-- 1D DP → Coin Change
+- 1D DP → Coin Change / LIS
 
 **Step 2 (5 min):** Review your complexity cheat sheet:
 
@@ -518,6 +579,8 @@ if amount == 0: return 0    # DP
 | Sliding Window | O(n) | O(1) or O(k) |
 | 1D DP | O(n×k) | O(n) |
 | Prefix Sum | O(n) build, O(1) query | O(n) |
+| Heap (top-K) | O(n log k) | O(k) |
+| LIS (optimal) | O(n log n) | O(n) |
 
 **Step 3 (5 min):** Mental simulation — pick any 2 problems from the list and trace through the algorithm in your head with a small example. No coding.
 
@@ -527,14 +590,14 @@ if amount == 0: return 0    # DP
 
 | Question | Why Skipped |
 |----------|-------------|
-| LCS (Q9) | 2D DP takes 45+ min to master; lower ROI in 5 hours |
-| Trapping Rain Water (Q15) | Medium difficulty, lower frequency than selected problems |
-| LRU Cache (Q32) | Design problem; takes 40+ min; rarely appears in online rounds |
-| Topological Sort (Q34) | Graph theory depth; lower frequency in Fractal.ai rounds |
-| Minimum Window Substring (Q35) | Advanced sliding window; master basic SW first |
-| Matrix Spiral (Q25) | Low frequency; high implementation complexity |
-| Count Inversions (Q26) | Requires modified merge sort; high time cost |
-| Detect Cycle (Q23) | Graph theory; lower frequency in analytics company rounds |
+| LCS | 2D DP takes 45+ min to master; lower ROI in 5 hours |
+| Trapping Rain Water | Medium difficulty, lower frequency than selected problems |
+| LRU Cache | Design problem; takes 40+ min; rarely appears in online rounds |
+| Topological Sort | Graph theory depth; lower frequency in Fractal.ai rounds |
+| Minimum Window Substring | Advanced sliding window; master basic SW first |
+| Matrix Spiral | Low frequency; high implementation complexity |
+| Count Inversions | Requires modified merge sort; high time cost |
+| Detect Cycle | Graph theory; lower frequency in analytics company rounds |
 
 **Rule applied:** If a problem takes >35 minutes to master AND has medium frequency, skip it. Use that time to deeply understand a high-frequency problem instead.
 
@@ -556,6 +619,7 @@ Is it about subarrays/substrings?
          Is it about optimal choices? → DP
          Is it about brackets/order? → Stack
          Is it about top-K? → Heap
+         Is it about sequences/trends? → LIS / DP + Binary Search
 ```
 
 ---
@@ -565,6 +629,7 @@ Is it about subarrays/substrings?
 - [ ] Fast I/O template ready (`import sys; input = sys.stdin.readline`)
 - [ ] `from collections import Counter, defaultdict, deque` imported
 - [ ] `from heapq import heappush, heappop` imported
+- [ ] `import bisect` imported (for LIS)
 - [ ] Remember: always check for empty input first
 - [ ] Remember: state your approach before coding
 - [ ] Remember: mention time/space complexity after coding
@@ -572,5 +637,5 @@ Is it about subarrays/substrings?
 
 ---
 
-*5-Hour Plan covers: 10 problems × 9 patterns × ~80% of Fractal.ai interview content*
-*Estimated confidence boost: High — these 10 problems are the highest-ROI selection from the full 35-question list*
+*5-Hour Plan covers: 12 problems × 9 patterns × ~80% of Fractal.ai interview content*
+*For the full 35-question reference with all solutions, see: Fractal_AI_Interview_Prep.md*
