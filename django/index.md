@@ -127,7 +127,7 @@ Model.objects.annotate(count=Count('related'))
 
 ## 📖 How to Use This Guide
 
-1. **Start with `README.md`** — get the big picture and priority questions
+1. **Start with `index.md`** — get the big picture and priority questions
 2. **Read each section file** — questions are ordered easy → hard
 3. **Practice code examples** — type them out, don't just read
 4. **Focus on ⭐⭐⭐ questions** — highest interview frequency
