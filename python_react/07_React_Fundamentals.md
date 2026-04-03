@@ -269,7 +269,7 @@ Button.propTypes = {
 ### Q6. What is state in React? How is it different from props?
 
 **Answer:**
-
+https://github.com/gaugoy/reactjs-interview-questions/tree/master?tab=readme-ov-file#what-is-the-difference-between-state-and-props
 | | Props | State |
 |-|-------|-------|
 | Source | Parent component | Component itself |
