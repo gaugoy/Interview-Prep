@@ -44,6 +44,42 @@ function Counter() {
 
 ---
 
+### Q 1.1 What are the major features of React?
+
+  React offers a powerful set of features that have made it one of the most popular JavaScript libraries for building user interfaces:
+
+  **Core Features:**
+
+  - **Component-Based Architecture**: React applications are built using components - independent, reusable pieces of code that return HTML via a render function. This modular approach enables better code organization, reusability, and maintenance.
+
+  - **Virtual DOM**: React creates an in-memory data structure cache, computes the resulting differences, and efficiently updates only the changed parts in the browser DOM. This approach significantly improves performance compared to direct DOM manipulation.
+
+  - **JSX (JavaScript XML)**: A syntax extension that allows writing HTML-like code in JavaScript. JSX makes the code more readable and expressive while providing the full power of JavaScript.
+
+  - **Unidirectional Data Flow**: React follows a one-way data binding model where data flows from parent to child components. This makes the code more predictable and easier to debug.
+
+  - **Declarative UI**: React allows you to describe what your UI should look like for a given state, and it handles the DOM updates when the underlying data changes.
+
+  **Advanced Features:**
+
+  - **React Hooks**: Introduced in React 16.8, hooks allow using state and other React features in functional components without writing classes.
+
+  - **Context API**: Provides a way to share values between components without explicitly passing props through every level of the component tree.
+
+  - **Error Boundaries**: Components that catch JavaScript errors anywhere in their child component tree and display fallback UI instead of crashing.
+
+  - **Server-Side Rendering (SSR)**: Enables rendering React components on the server before sending HTML to the client, improving performance and SEO.
+
+  - **Concurrent Mode**: A set of new features (in development) that help React apps stay responsive and gracefully adjust to the user's device capabilities and network speed.
+
+  - **React Server Components**: A new feature that allows components to be rendered entirely on the server, reducing bundle size and improving performance.
+
+  - **Suspense**: A feature that lets your components "wait" for something before rendering, supporting code-splitting and data fetching with cleaner code.
+
+  These features collectively make React powerful for building everything from small widgets to complex, large-scale web applications.
+
+---
+
 ### Q2. What is the Virtual DOM?
 
 **Answer:**
@@ -82,6 +118,7 @@ function Example() {
 ```
 
 ---
+
 
 ### Q3. What is JSX?
 
