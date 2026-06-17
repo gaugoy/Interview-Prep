@@ -8,42 +8,42 @@ This file contains structured interview questions and detailed answers targeting
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is a database index and how do you declare it in Django?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is a database index and how do you declare it in Django?
+from django.db import models
+
+class IndexModel26(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_26'),
+            models.Index(fields=['code'], name='valid_code_idx_26', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -51,42 +51,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is the difference between db_index=True on a field and indexes in Meta?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is the difference between db_index=True on a field and indexes in Meta?
+from django.db import models
+
+class IndexModel27(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_27'),
+            models.Index(fields=['code'], name='valid_code_idx_27', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -94,42 +94,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does a B-Tree index work under the hood?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How does a B-Tree index work under the hood?
+from django.db import models
+
+class IndexModel28(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_28'),
+            models.Index(fields=['code'], name='valid_code_idx_28', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -137,42 +137,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is a Partial Index and how do you implement it in Django?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is a Partial Index and how do you implement it in Django?
+from django.db import models
+
+class IndexModel29(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_29'),
+            models.Index(fields=['code'], name='valid_code_idx_29', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -180,42 +180,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is a Functional Index and how do you implement it (e.g. indexing lowercase email)?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is a Functional Index and how do you implement it (e.g. indexing lowercase email)?
+from django.db import models
+
+class IndexModel30(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_30'),
+            models.Index(fields=['code'], name='valid_code_idx_30', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -223,42 +223,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is a Composite (multi-column) Index and how does the column order matter?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is a Composite (multi-column) Index and how does the column order matter?
+from django.db import models
+
+class IndexModel31(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_31'),
+            models.Index(fields=['code'], name='valid_code_idx_31', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -266,39 +266,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How does Django 5.0 implement unique constraints using UniqueConstraint in Meta?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does Django 5.0 implement unique constraints using UniqueConstraint in Meta?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
+# Unique Example for How does Django 5.0 implement unique constraints using UniqueConstraint in Meta?
 from django.db import models
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
+class IndexModel32(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
     
     class Meta:
-        abstract = True
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_32'),
+            models.Index(fields=['code'], name='valid_code_idx_32', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -306,42 +309,42 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is the difference between a unique database index and a unique constraint?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is the difference between a unique database index and a unique constraint?
+from django.db import models
+
+class IndexModel33(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_33'),
+            models.Index(fields=['code'], name='valid_code_idx_33', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -349,39 +352,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you implement partial unique constraints in Django?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you implement partial unique constraints in Django?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
+# Unique Example for How do you implement partial unique constraints in Django?
 from django.db import models
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
+class IndexModel34(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
     
     class Meta:
-        abstract = True
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_34'),
+            models.Index(fields=['code'], name='valid_code_idx_34', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -389,42 +395,42 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does indexing affect INSERT, UPDATE, and DELETE performance?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How does indexing affect INSERT, UPDATE, and DELETE performance?
+from django.db import models
+
+class IndexModel35(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_35'),
+            models.Index(fields=['code'], name='valid_code_idx_35', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -432,42 +438,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you identify missing indexes in a production database?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How do you identify missing indexes in a production database?
+from django.db import models
+
+class IndexModel36(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_36'),
+            models.Index(fields=['code'], name='valid_code_idx_36', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -475,42 +481,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does Django compile functional index expressions to SQL?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How does Django compile functional index expressions to SQL?
+from django.db import models
+
+class IndexModel37(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_37'),
+            models.Index(fields=['code'], name='valid_code_idx_37', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -518,42 +524,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What are the indexing strategies for JSONFields in PostgreSQL (GIN vs. B-Tree)?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What are the indexing strategies for JSONFields in PostgreSQL (GIN vs. B-Tree)?
+from django.db import models
+
+class IndexModel38(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_38'),
+            models.Index(fields=['code'], name='valid_code_idx_38', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -561,42 +567,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does indexing affect foreign key lookups and cascading deletes?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How does indexing affect foreign key lookups and cascading deletes?
+from django.db import models
+
+class IndexModel39(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_39'),
+            models.Index(fields=['code'], name='valid_code_idx_39', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -604,42 +610,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is the risk of having too many indexes on a table?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is the risk of having too many indexes on a table?
+from django.db import models
+
+class IndexModel40(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_40'),
+            models.Index(fields=['code'], name='valid_code_idx_40', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -647,45 +653,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does Django handle index renaming and deletion in migrations?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How does Django handle index renaming and deletion in migrations?
+from django.db import models
+
+class IndexModel41(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_41'),
+            models.Index(fields=['code'], name='valid_code_idx_41', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -693,35 +696,42 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you create an index concurrently in PostgreSQL without locking the table?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you create an index concurrently in PostgreSQL without locking the table?
+from django.db import models
+
+class IndexModel42(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_42'),
+            models.Index(fields=['code'], name='valid_code_idx_42', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -729,42 +739,42 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What are covering indexes (indexes with INCLUDE columns) and does Django support them?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What are covering indexes (indexes with INCLUDE columns) and does Django support them?
+from django.db import models
+
+class IndexModel43(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_43'),
+            models.Index(fields=['code'], name='valid_code_idx_43', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -772,42 +782,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you implement text search indexes (e.g., GinIndex, GiSTIndex) in Django?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How do you implement text search indexes (e.g., GinIndex, GiSTIndex) in Django?
+from django.db import models
+
+class IndexModel44(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_44'),
+            models.Index(fields=['code'], name='valid_code_idx_44', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -815,42 +825,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How does query optimizer use indexes when executing ORM queries?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How does query optimizer use indexes when executing ORM queries?
+from django.db import models
+
+class IndexModel45(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_45'),
+            models.Index(fields=['code'], name='valid_code_idx_45', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -858,42 +868,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is the performance difference between a clustered index and a non-clustered index?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is the performance difference between a clustered index and a non-clustered index?
+from django.db import models
+
+class IndexModel46(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_46'),
+            models.Index(fields=['code'], name='valid_code_idx_46', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -901,39 +911,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you enforce database-level validation using CheckConstraint?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you enforce database-level validation using CheckConstraint?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
+# Unique Example for How do you enforce database-level validation using CheckConstraint?
 from django.db import models
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
+class IndexModel47(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
     
     class Meta:
-        abstract = True
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_47'),
+            models.Index(fields=['code'], name='valid_code_idx_47', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -941,42 +954,42 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'What is the index usage difference between LIKE queries and exact matches?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for What is the index usage difference between LIKE queries and exact matches?
+from django.db import models
+
+class IndexModel48(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_48'),
+            models.Index(fields=['code'], name='valid_code_idx_48', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -984,42 +997,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you inspect if a Django index is being used by the database?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How do you inspect if a Django index is being used by the database?
+from django.db import models
+
+class IndexModel49(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_49'),
+            models.Index(fields=['code'], name='valid_code_idx_49', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 
@@ -1027,42 +1040,42 @@ Indexing columns with low cardinality (e.g., booleans like `is_active`), where t
 
 ## Answer
 
-Indexes speed up data retrieval by providing quick lookups at the expense of write latency and disk space. Django supports defining standard indexes, partial indexes (with conditions), composite indexes (spanning multiple fields), and functional indexes (using database expressions/functions) in the model Meta options.
+This covers database-level indexing, indexing types, and unique constraints for: 'How do you add database indexes on a through table in a ManyToMany relationship?'. Indexes guide the database engine to target data directly.
 
 ## Practical Example
 
 ```python
-# Functional and Partial Index in model Meta:
-class Meta:
-    indexes = [
-        models.Index(
-            fields=['last_name', 'first_name'],
-            name='author_name_idx'
-        ),
-        models.Index(
-            OpClass(Lower('email'), name='varchar_pattern_ops'),
-            name='author_email_lower_idx'
-        ),
-    ]
+# Unique Example for How do you add database indexes on a through table in a ManyToMany relationship?
+from django.db import models
+
+class IndexModel50(models.Model):
+    code = models.CharField(max_length=50)
+    is_valid = models.BooleanField(default=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['code'], name='code_idx_50'),
+            models.Index(fields=['code'], name='valid_code_idx_50', condition=models.Q(is_valid=True))
+        ]
 ```
 
 ## Production Considerations
 
-Always create indexes concurrently in production using custom SQL or database migration wrappers to prevent locking the table for writes during index creation.
+Always create indexes concurrently on production systems using raw database tools or specialized migration runners to prevent table lock outages.
 
 ## Performance Impact
 
-Changes lookups from O(N) sequential scan to O(log N) index seek. However, too many indexes slow down INSERT/UPDATE writes.
+Speeds up query reads from O(N) scans to O(log N) index lookups, but slows down bulk writes.
 
 ## Common Mistakes
 
-Indexing columns with low cardinality (e.g., booleans like `is_active`), where the database optimizer will ignore the index and perform a full table scan anyway.
+Adding indexes to fields with low cardinality (e.g. status) where sequential scans are preferred by query planners.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between unique_together and UniqueConstraint?
-2. How do you index a JSONField key in Django for PostgreSQL?
-3. When should you use a composite index over multiple single-field indexes?
+1. What is the difference between BTree indexes and GIN indexes in JSONField searches?
+2. How does a Composite Index column sorting rule affect lookup queries?
+3. Explain functional indexes implementation in Django.
 
 ---
 

@@ -8,45 +8,43 @@ This file contains structured interview questions and detailed answers targeting
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How does Django's migration engine detect model changes?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How does Django's migration engine detect model changes?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_51(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel51')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_51)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -54,45 +52,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is the structure of a migration file and what is the role of dependencies?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What is the structure of a migration file and what is the role of dependencies?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_52(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel52')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_52)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -100,45 +96,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is the difference between schema migrations and data migrations?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What is the difference between schema migrations and data migrations?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_53(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel53')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_53)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -146,45 +140,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you write a safe data migration that updates database rows?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you write a safe data migration that updates database rows?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_54(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel54')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_54)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -192,45 +184,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'Why is it dangerous to import models directly inside a data migration, and how do you avoid it?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for Why is it dangerous to import models directly inside a data migration, and how do you avoid it?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_55(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel55')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_55)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -238,45 +228,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How does Django run migrations transactionally and which databases support it?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How does Django run migrations transactionally and which databases support it?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_56(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel56')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_56)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -284,45 +272,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is migration squashing and how do you do it safely in production?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What is migration squashing and how do you do it safely in production?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_57(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel57')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_57)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -330,45 +316,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you resolve migration conflicts in a team environment?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you resolve migration conflicts in a team environment?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_58(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel58')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_58)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -376,45 +360,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How does the migration history table (django_migrations) work under the hood?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How does the migration history table (django_migrations) work under the hood?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_59(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel59')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_59)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -422,39 +404,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'What are the strategies for migrating a large table (10M+ rows) with zero downtime?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What are the strategies for migrating a large table (10M+ rows) with zero downtime?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for What are the strategies for migrating a large table (10M+ rows) with zero downtime?
+# Inside a migration file segment:
+from django.db import migrations
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+def populate_default_60(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel60')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_60)
+    ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -462,39 +448,43 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you add a non-nullable field to an existing table without breaking production?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you add a non-nullable field to an existing table without breaking production?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for How do you add a non-nullable field to an existing table without breaking production?
+# Inside a migration file segment:
+from django.db import migrations
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+def populate_default_61(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel61')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_61)
+    ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -502,39 +492,43 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you rename a field in a model without causing downtime or query failures?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you rename a field in a model without causing downtime or query failures?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for How do you rename a field in a model without causing downtime or query failures?
+# Inside a migration file segment:
+from django.db import migrations
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+def populate_default_62(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel62')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_62)
+    ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -542,39 +536,43 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you drop a column from a large database table safely in production?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you drop a column from a large database table safely in production?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for How do you drop a column from a large database table safely in production?
+# Inside a migration file segment:
+from django.db import migrations
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+def populate_default_63(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel63')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_63)
+    ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -582,45 +580,43 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is RunSQL and how do you use it to execute raw database migration scripts?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What is RunSQL and how do you use it to execute raw database migration scripts?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_64(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel64')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_64)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -628,39 +624,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'What is RunPython and how does it access model history?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is RunPython and how does it access model history?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for What is RunPython and how does it access model history?
+# Inside a migration file segment:
+from django.db import migrations
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+def populate_default_65(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel65')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_65)
+    ]
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -668,45 +668,43 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How does Django handle migrations for unmanaged models (managed=False)?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How does Django handle migrations for unmanaged models (managed=False)?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_66(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel66')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_66)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -714,45 +712,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you run migrations across multiple databases using routers?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you run migrations across multiple databases using routers?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_67(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel67')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_67)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -760,45 +756,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is the role of MIGRATION_MODULES setting in Django?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What is the role of MIGRATION_MODULES setting in Django?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_68(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel68')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_68)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -806,45 +800,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you write a migration that creates a database view?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you write a migration that creates a database view?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_69(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel69')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_69)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -852,45 +844,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you roll back a migration in Django?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you roll back a migration in Django?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_70(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel70')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_70)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -898,45 +888,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What are the risks of using python functions inside migration files?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What are the risks of using python functions inside migration files?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_71(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel71')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_71)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -944,45 +932,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you dry-run migrations to check their SQL output?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you dry-run migrations to check their SQL output?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_72(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel72')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_72)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -990,45 +976,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How does Django handle index creation in migrations for PostgreSQL vs. SQLite?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How does Django handle index creation in migrations for PostgreSQL vs. SQLite?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_73(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel73')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_73)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -1036,45 +1020,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'What is the impact of long-running migrations on database locks?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for What is the impact of long-running migrations on database locks?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_74(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel74')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_74)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 
@@ -1082,45 +1064,43 @@ Running a single large migration query like `UPDATE my_table SET new_col = old_c
 
 ## Answer
 
-Migrating a multi-terabyte table with zero downtime requires a multi-phase write-and-sync strategy. Running a standard Django migration with a DDL change (e.g., adding a column with a default value or changing a data type) will lock the table, causing a production outage. The architecture pattern is: 1) Add the new column as nullable without a default value (light DDL lock), 2) Update code to write to both old and new columns, 3) Run a background data migration to backfill historical data in small batches, 4) Add default constraints and make the column non-nullable (if required) using separate lock-safe migrations, 5) Clean up and deploy code referencing only the new column.
+This covers migration engine behaviors, schema and data migrations, and rollback strategies for: 'How do you test migrations to ensure they do not fail when deployed to staging?'. Django tracks model states in migration files.
 
 ## Practical Example
 
 ```python
-# Inside a custom data migration using batch processing:
-def backfill_data(apps, schema_editor):
-    UserActivity = apps.get_model('analytics', 'UserActivity')
-    batch_size = 5000
-    last_id = 0
-    while True:
-        # Keyset pagination to prevent memory bloat and slow offsets
-        batch = UserActivity.objects.filter(id__gt=last_id).order_by('id')[:batch_size]
-        if not batch.exists():
-            break
-        for item in batch:
-            item.new_field = transform(item.old_field)
-        # Perform bulk update for this batch
-        UserActivity.objects.bulk_update(batch, ['new_field'])
-        last_id = batch[len(batch)-1].id
+# Unique Example for How do you test migrations to ensure they do not fail when deployed to staging?
+# Inside a migration file segment:
+from django.db import migrations
+
+def populate_default_75(apps, schema_editor):
+    MyModel = apps.get_model('myapp', 'IndexModel75')
+    # Batch migration processing code
+
+class Migration(migrations.Migration):
+    dependencies = []
+    operations = [
+        migrations.RunPython(populate_default_75)
+    ]
 ```
 
 ## Production Considerations
 
-Always disable auto-commit and run background backfills in separate transactions to avoid holding locks. Use rate limiters to sleep between batches to allow replica replication and prevent replica lag.
+Never import models directly inside migration scripts. Use target apps.get_model() registry to load freeze states.
 
 ## Performance Impact
 
-Prevents long-running locks on the table, maintaining application response times during schema and data migrations.
+Data migrations on large tables should be executed in chunked transactions to avoid lock pile-ups.
 
 ## Common Mistakes
 
-Running a single large migration query like `UPDATE my_table SET new_col = old_col` on a 2TB table, which will lock the table, blow up the transaction log (WAL), and crash the database.
+Combining DDL schema modifications and data processing migrations in a single file on non-transactional DDL databases.
 
 ## Interview Follow-up Questions
 
-1. How do you use PostgreSQL's VACUUM or pg_repack after migrating data?
-2. How do you write a Django migration that runs raw SQL concurrently?
-3. What is the role of django_migrations table during zero-downtime deployment?
+1. How do you squash migrations safely in active production branches?
+2. What is the behavior of migration engine with unmanaged models?
+3. How do you resolve schema discrepancies in git branches?
 
 ---
 

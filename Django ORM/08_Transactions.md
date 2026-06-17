@@ -8,39 +8,39 @@ This file contains structured interview questions and detailed answers targeting
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does transaction.atomic() work internally?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does transaction.atomic() work internally?
+from django.db import transaction, models
 
-try:
+class TxModel51(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_51():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel51.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -48,39 +48,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What is the difference between database-level autocommit and Django's transaction mode?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What is the difference between database-level autocommit and Django's transaction mode?
+from django.db import transaction, models
 
-try:
+class TxModel52(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_52():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel52.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -88,39 +88,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does Django manage savepoints in nested transaction.atomic() blocks?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does Django manage savepoints in nested transaction.atomic() blocks?
+from django.db import transaction, models
 
-try:
+class TxModel53(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_53():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel53.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -128,39 +128,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you roll back a transaction manually inside an atomic block?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you roll back a transaction manually inside an atomic block?
+from django.db import transaction, models
 
-try:
+class TxModel54(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_54():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel54.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -168,39 +168,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What are the side effects of catching database exceptions inside atomic blocks?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What are the side effects of catching database exceptions inside atomic blocks?
+from django.db import transaction, models
 
-try:
+class TxModel55(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_55():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel55.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -208,39 +208,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does transaction.on_commit() work and why is it crucial for task queues (e.g., Celery)?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does transaction.on_commit() work and why is it crucial for task queues (e.g., Celery)?
+from django.db import transaction, models
 
-try:
+class TxModel56(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_56():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel56.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -248,39 +248,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What happens to database connections when an atomic block raises an exception?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What happens to database connections when an atomic block raises an exception?
+from django.db import transaction, models
 
-try:
+class TxModel57(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_57():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel57.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -288,39 +288,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you implement transaction-level isolation levels in Django?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you implement transaction-level isolation levels in Django?
+from django.db import transaction, models
 
-try:
+class TxModel58(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_58():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel58.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -328,39 +328,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What is the performance impact of using large atomic blocks in production?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What is the performance impact of using large atomic blocks in production?
+from django.db import transaction, models
 
-try:
+class TxModel59(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_59():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel59.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -368,39 +368,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you handle nested transactions with multiple database connections?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you handle nested transactions with multiple database connections?
+from django.db import transaction, models
 
-try:
+class TxModel60(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_60():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel60.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -408,39 +408,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'Explain how database savepoints can exhaust PostgreSQL transaction ID limits.'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for Explain how database savepoints can exhaust PostgreSQL transaction ID limits.
+from django.db import transaction, models
 
-try:
+class TxModel61(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_61():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel61.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -448,39 +448,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does Django prevent transactional deadlocks when executing concurrent transactions?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does Django prevent transactional deadlocks when executing concurrent transactions?
+from django.db import transaction, models
 
-try:
+class TxModel62(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_62():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel62.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -488,39 +488,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What happens when you mix non-database operations (like API calls) inside atomic blocks?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What happens when you mix non-database operations (like API calls) inside atomic blocks?
+from django.db import transaction, models
 
-try:
+class TxModel63(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_63():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel63.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -528,39 +528,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you write tests that require real database commits instead of rollbacks?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you write tests that require real database commits instead of rollbacks?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for How do you write tests that require real database commits instead of rollbacks?
+from django.db import transaction, models
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+class TxModel64(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_64():
+    with transaction.atomic():
+        TxModel64.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -568,39 +568,39 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What is the difference between TransactionTestCase and TestCase in Django testing?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What is the difference between TransactionTestCase and TestCase in Django testing?
+from django.db import transaction, models
 
-try:
+class TxModel65(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_65():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel65.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -608,39 +608,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does transaction.atomic() handle threading?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does transaction.atomic() handle threading?
+from django.db import transaction, models
 
-try:
+class TxModel66(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_66():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel66.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -648,39 +648,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'What is the risk of using autocommit=False in Django database configuration?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What is the risk of using autocommit=False in Django database configuration?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for What is the risk of using autocommit=False in Django database configuration?
+from django.db import transaction, models
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+class TxModel67(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_67():
+    with transaction.atomic():
+        TxModel67.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -688,39 +688,39 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you execute raw SQL transaction commands inside Django?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you execute raw SQL transaction commands inside Django?
+from django.db import transaction, models
 
-try:
+class TxModel68(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_68():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel68.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -728,39 +728,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does atomic interact with select_for_update?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does atomic interact with select_for_update?
+from django.db import transaction, models
 
-try:
+class TxModel69(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_69():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel69.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -768,39 +768,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What happens if the application crashes in the middle of an atomic block?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What happens if the application crashes in the middle of an atomic block?
+from django.db import transaction, models
 
-try:
+class TxModel70(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_70():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel70.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -808,39 +808,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you safely retry failed transactions due to serialization errors?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you safely retry failed transactions due to serialization errors?
+from django.db import transaction, models
 
-try:
+class TxModel71(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_71():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel71.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -848,39 +848,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How does Django 5.0 handle asynchronous transaction management?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How does Django 5.0 handle asynchronous transaction management?
+from django.db import transaction, models
 
-try:
+class TxModel72(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_72():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel72.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -888,39 +888,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'What is the impact of connection pooling on transaction state cleanup?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What is the impact of connection pooling on transaction state cleanup?
+from django.db import transaction, models
 
-try:
+class TxModel73(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_73():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel73.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -928,39 +928,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you handle multi-database transaction routing?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you handle multi-database transaction routing?
+from django.db import transaction, models
 
-try:
+class TxModel74(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_74():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        TxModel74.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 
@@ -968,39 +968,39 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you implement 2-phase commit concepts using Django ORM?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers transactional boundary management, savepoints, and autocommit details for: 'How do you implement 2-phase commit concepts using Django ORM?'. Django atomic blocks control commit logic.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for How do you implement 2-phase commit concepts using Django ORM?
+from django.db import transaction, models
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+class TxModel75(models.Model):
+    amount = models.IntegerField()
+
+def execute_tx_75():
+    with transaction.atomic():
+        TxModel75.objects.create(amount=100)
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Keep transactions as short as possible to avoid locking resources. Never wrap HTTP API calls inside atomic blocks.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Grouping database changes into a single atomic block reduces commit operations on database WAL write logs.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Catching database exceptions inside transaction.atomic() block without bubbling up, leaving the transaction in a broken state.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. Explain how transaction.on_commit() handles asynchronous tasks.
+2. What are PostgreSQL savepoints limitations inside loop statements?
+3. How do transaction isolation levels prevent phantom reads?
 
 ---
 

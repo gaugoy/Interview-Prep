@@ -8,35 +8,41 @@ This file contains structured interview questions and detailed answers targeting
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is the difference between Optimistic and Pessimistic locking?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for What is the difference between Optimistic and Pessimistic locking?
+from django.db import models, transaction
+
+class BookingModel101(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_101():
+    with transaction.atomic():
+        booking = BookingModel101.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -44,35 +50,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you implement pessimistic locking in Django using select_for_update()?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you implement pessimistic locking in Django using select_for_update()?
+from django.db import models, transaction
+
+class BookingModel102(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_102():
+    with transaction.atomic():
+        booking = BookingModel102.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -80,35 +92,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is the difference between select_for_update(nowait=True) and select_for_update(skip_locked=True)?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for What is the difference between select_for_update(nowait=True) and select_for_update(skip_locked=True)?
+from django.db import models, transaction
+
+class BookingModel103(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_103():
+    with transaction.atomic():
+        booking = BookingModel103.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -116,35 +134,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How does select_for_update() behave when using multiple database backends?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How does select_for_update() behave when using multiple database backends?
+from django.db import models, transaction
+
+class BookingModel104(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_104():
+    with transaction.atomic():
+        booking = BookingModel104.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -152,35 +176,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you apply locks only on specific related tables using select_for_update(of=(...))?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you apply locks only on specific related tables using select_for_update(of=(...))?
+from django.db import models, transaction
+
+class BookingModel105(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_105():
+    with transaction.atomic():
+        booking = BookingModel105.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -188,39 +218,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What are database transaction isolation levels and how do they impact Django ORM?'.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What are database transaction isolation levels and how do they impact Django ORM?
+from django.db import models, transaction
 
-try:
+class BookingModel106(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_106():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        booking = BookingModel106.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -228,39 +260,41 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'What is a Dirty Read, Non-repeatable Read, and Phantom Read?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is a Dirty Read, Non-repeatable Read, and Phantom Read?'.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for What is a Dirty Read, Non-repeatable Read, and Phantom Read?
+from django.db import models, transaction
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+class BookingModel107(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_107():
+    with transaction.atomic():
+        booking = BookingModel107.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -268,35 +302,41 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you prevent deadlocks in Django when executing concurrent queries?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you prevent deadlocks in Django when executing concurrent queries?
+from django.db import models, transaction
+
+class BookingModel108(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_108():
+    with transaction.atomic():
+        booking = BookingModel108.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -304,35 +344,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you implement optimistic concurrency control using a version field in Django?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you implement optimistic concurrency control using a version field in Django?
+from django.db import models, transaction
+
+class BookingModel109(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_109():
+    with transaction.atomic():
+        booking = BookingModel109.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -340,35 +386,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is the performance cost of select_for_update() on high-throughput systems?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for What is the performance cost of select_for_update() on high-throughput systems?
+from django.db import models, transaction
+
+class BookingModel110(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_110():
+    with transaction.atomic():
+        booking = BookingModel110.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -376,35 +428,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How does Django handle lock timeouts in select_for_update()?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How does Django handle lock timeouts in select_for_update()?
+from django.db import models, transaction
+
+class BookingModel111(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_111():
+    with transaction.atomic():
+        booking = BookingModel111.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -412,39 +470,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-The N+1 query problem occurs when the application executes one query to fetch parent records and then N additional queries to fetch related children records. To eliminate this, Django provides `select_related` (which performs a SQL JOIN for single-valued relationships like ForeignKey or OneToOneField) and `prefetch_related` (which performs a separate SQL query with an `IN` clause to fetch multi-valued relations like ManyToManyField or reverse ForeignKeys, then joins them in Python memory).
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How does select_for_update() interact with select_related?'.
 
 ## Practical Example
 
 ```python
-# Optimized: select_related performs a single SQL JOIN
-books = Book.objects.select_related('author').filter(in_print=True)
-for book in books:
-    print(book.author.name)  # No additional DB query
+# Unique Example for How does select_for_update() interact with select_related?
+from django.db import models, transaction
 
-# Optimized: prefetch_related executes exactly 2 queries
-authors = Author.objects.prefetch_related('books').all()
-for author in authors:
-    print(author.books.all())  # Read from Python memory cache
+class BookingModel112(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_112():
+    with transaction.atomic():
+        booking = BookingModel112.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-In microservice environments or high-throughput systems, prefetching can consume considerable application memory if the fetched dataset is large. Always limit fields retrieved using `.only()` or `.defer()` when prefetching massive tables.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Changes database complexity from O(N) queries to O(1) or O(K) where K is the number of prefetched relationships. This reduces latency significantly.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `prefetch_related` and then applying filters on the related manager inside a loop (e.g., `author.books.filter(genre='sci-fi')`), which completely bypasses the prefetch cache and triggers an additional SQL query.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. How does Django's Prefetch object allow filtering of prefetched querysets?
-2. What is the difference in SQL structure between select_related and prefetch_related?
-3. How do you clear or reset the prefetch cache of a model instance?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -452,39 +512,41 @@ Using `prefetch_related` and then applying filters on the related manager inside
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What happens when you call select_for_update() outside of a transaction block?'.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for What happens when you call select_for_update() outside of a transaction block?
+from django.db import models, transaction
 
-try:
+class BookingModel113(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_113():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        booking = BookingModel113.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -492,35 +554,41 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you handle concurrency in background workers (e.g., Celery) using Django locks?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you handle concurrency in background workers (e.g., Celery) using Django locks?
+from django.db import models, transaction
+
+class BookingModel114(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_114():
+    with transaction.atomic():
+        booking = BookingModel114.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -528,35 +596,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you implement a distributed lock using Django's database backend?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you implement a distributed lock using Django's database backend?
+from django.db import models, transaction
+
+class BookingModel115(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_115():
+    with transaction.atomic():
+        booking = BookingModel115.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -564,35 +638,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is the lock type used by select_for_update() in PostgreSQL (e.g. FOR UPDATE vs. FOR SHARE)?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for What is the lock type used by select_for_update() in PostgreSQL (e.g. FOR UPDATE vs. FOR SHARE)?
+from django.db import models, transaction
+
+class BookingModel116(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_116():
+    with transaction.atomic():
+        booking = BookingModel116.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -600,35 +680,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How does skip_locked help in implementing high-throughput queue systems in the database?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How does skip_locked help in implementing high-throughput queue systems in the database?
+from django.db import models, transaction
+
+class BookingModel117(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_117():
+    with transaction.atomic():
+        booking = BookingModel117.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -636,39 +722,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Django manages database transactions using `transaction.atomic()`. When entering an atomic block, Django opens a transaction (or creates a savepoint if nested). If the block executes successfully, the changes are committed. If an exception is raised, the changes are rolled back. Internally, Django wraps connection operations with autocommit controls to enforce transaction limits.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you handle transaction serialization failures in Django?'.
 
 ## Practical Example
 
 ```python
-from django.db import transaction
+# Unique Example for How do you handle transaction serialization failures in Django?
+from django.db import models, transaction
 
-try:
+class BookingModel118(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_118():
     with transaction.atomic():
-        user.save()
-        profile.save()
-        # If either fails, both roll back
-except DatabaseError:
-        # Handle rollback recovery
+        booking = BookingModel118.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Keep atomic blocks as short as possible. Performing external API requests or slow operations inside atomic blocks holds database locks open longer, starving connection pools.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Groups multiple writes into a single commit, reducing IO overhead. However, long-running transactions increase table and row locking times.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Catching database exceptions inside an atomic block without letting the block fail, which raises a `TransactionManagementError` on subsequent database writes because the transaction is marked as broken.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. How does transaction.on_commit() ensure safety for side effects?
-2. What are transaction savepoints and how do nested atomic blocks use them?
-3. How do database isolation levels affect transaction conflicts in Django?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -676,35 +764,41 @@ Catching database exceptions inside an atomic block without letting the block fa
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is the database locking behavior during bulk updates and creates?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for What is the database locking behavior during bulk updates and creates?
+from django.db import models, transaction
+
+class BookingModel119(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_119():
+    with transaction.atomic():
+        booking = BookingModel119.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -712,35 +806,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you write tests to simulate database deadlocks and race conditions?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you write tests to simulate database deadlocks and race conditions?
+from django.db import models, transaction
+
+class BookingModel120(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_120():
+    with transaction.atomic():
+        booking = BookingModel120.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -748,35 +848,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How does Django handle lock escalation at the database level?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How does Django handle lock escalation at the database level?
+from django.db import models, transaction
+
+class BookingModel121(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_121():
+    with transaction.atomic():
+        booking = BookingModel121.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -784,35 +890,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'What is the difference between table-level locks and row-level locks?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for What is the difference between table-level locks and row-level locks?
+from django.db import models, transaction
+
+class BookingModel122(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_122():
+    with transaction.atomic():
+        booking = BookingModel122.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -820,39 +932,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-This concept covers advanced database configurations and behaviors for: 'How do you perform concurrent updates using F expressions to avoid race conditions?'. It deals with persistence rules, validation, and integration with the backend engine.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you perform concurrent updates using F expressions to avoid race conditions?'.
 
 ## Practical Example
 
 ```python
-# Standard advanced configuration pattern
-from django.db import models
+# Unique Example for How do you perform concurrent updates using F expressions to avoid race conditions?
+from django.db import models, transaction
 
-class AuditModel(models.Model):
-    name = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        abstract = True
+class BookingModel123(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_123():
+    with transaction.atomic():
+        booking = BookingModel123.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Always verify the database schema constraints generated in migrations. Ensure validation rules match at both application and database level to prevent corrupt data.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Minimizes application latency by reducing database roundtrips, utilizing query caching, and avoiding heavy table scans.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Hardcoding configurations or bypassing standard ORM abstraction levels, which breaks database driver portability.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. How does this feature behave under high concurrent write load?
-2. How do you write a Django unit test to validate this behavior?
-3. What is the migration rollback strategy for this configuration?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -860,35 +974,41 @@ Hardcoding configurations or bypassing standard ORM abstraction levels, which br
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How does Django 5.0 handle select_for_update in async context?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How does Django 5.0 handle select_for_update in async context?
+from django.db import models, transaction
+
+class BookingModel124(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_124():
+    with transaction.atomic():
+        booking = BookingModel124.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
@@ -896,35 +1016,41 @@ Using `select_for_update()` outside of a transaction block. In Django, this rais
 
 ## Answer
 
-Concurrency conflicts arise when multiple requests attempt to read and write the same database record simultaneously. Django provides: 1) Optimistic locking (verifying record version on update using F expressions or version checks), 2) Pessimistic locking (locking rows using `select_for_update()`). Pessimistic locks prevent other queries from modifying or reading locked rows depending on lock parameters.
+This covers pessimistic locking, optimistic versioning, concurrency conflicts, and deadlock resolution for: 'How do you monitor database locks currently held by Django application processes?'.
 
 ## Practical Example
 
 ```python
-# Pessimistic locking: locks the row until the transaction commits
-with transaction.atomic():
-    account = Account.objects.select_for_update().get(id=1)
-    account.balance -= amount
-    account.save()
+# Unique Example for How do you monitor database locks currently held by Django application processes?
+from django.db import models, transaction
+
+class BookingModel125(models.Model):
+    seats = models.IntegerField(default=10)
+
+def reserve_seat_125():
+    with transaction.atomic():
+        booking = BookingModel125.objects.select_for_update().get(id=1)
+        booking.seats -= 1
+        booking.save()
 ```
 
 ## Production Considerations
 
-Using `select_for_update()` without a timeout or parameters like `nowait=True` or `skip_locked=True` can lead to application workers hanging and waiting indefinitely for locks, causing cascading timeouts.
+Use select_for_update(nowait=True) or (skip_locked=True) to avoid server lock pile-ups during heavy concurrent ticket or stock sales.
 
 ## Performance Impact
 
-Guarantees data consistency at the cost of concurrency. `skip_locked=True` improves performance when designing queue consumers by letting workers skip busy rows.
+Pessimistic locking blocks other connections, increasing read queue times. Optimistic locks scale better in high read-write scenarios.
 
 ## Common Mistakes
 
-Using `select_for_update()` outside of a transaction block. In Django, this raises a TransactionManagementError because locks require an open transaction boundary.
+Calling select_for_update() without transaction.atomic() boundary, raising TransactionManagementError.
 
 ## Interview Follow-up Questions
 
-1. What is the difference between nowait=True and skip_locked=True?
-2. How does select_for_update work with related models via the 'of' argument?
-3. How do you write a test for optimistic lock conflicts?
+1. What is lock escalation and when does it occur in Django updates?
+2. Explain skip_locked usefulness in designing worker queue pools.
+3. How do you handle Deadlock exceptions in database retry loops?
 
 ---
 
