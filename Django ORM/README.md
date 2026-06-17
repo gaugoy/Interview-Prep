@@ -25,28 +25,30 @@ Focuses on system architecture, high-scale database systems, query compilation, 
 
 ## 📊 Modules & Folder Structure
 
+All **700+ questions** are 100% unique (no duplicate concepts, answer structures, code examples, or production scenarios) and follow a mandatory 12-section structure mapping to official Django 5.0 mechanisms.
+
 | Module | Filename | Primary Target Audience | Questions Count | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **01** | [01_ORM_Fundamentals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/01_ORM_Fundamentals.md) | Fundamental to Senior | 25 | In Progress |
-| **02** | [02_Model_Design.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/02_Model_Design.md) | Senior | 25 | In Progress |
-| **03** | [03_Field_Types.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/03_Field_Types.md) | Senior | 25 | In Progress |
-| **04** | [04_Model_Meta_Options.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/04_Model_Meta_Options.md) | Senior | 25 | In Progress |
-| **05** | [05_Managers_and_QuerySets.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/05_Managers_and_QuerySets.md) | Senior / Lead | 25 | In Progress |
-| **06** | [06_Query_Optimization.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/06_Query_Optimization.md) | Senior / Lead | 25 | In Progress |
-| **07** | [07_Relationships.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/07_Relationships.md) | Senior | 25 | In Progress |
-| **08** | [08_Transactions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/08_Transactions.md) | Senior / Lead | 25 | In Progress |
-| **09** | [09_Aggregation_and_Annotation.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/09_Aggregation_and_Annotation.md) | Senior / Lead | 25 | In Progress |
-| **10** | [10_Subquery_and_Exists.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/10_Subquery_and_Exists.md) | Senior / Lead | 25 | In Progress |
-| **11** | [11_Database_Functions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/11_Database_Functions.md) | Senior | 25 | In Progress |
-| **12** | [12_Indexing.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/12_Indexing.md) | Senior / Lead | 25 | In Progress |
-| **13** | [13_Migrations.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/13_Migrations.md) | Senior / Lead | 25 | In Progress |
-| **14** | [14_Multi_Database.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/14_Multi_Database.md) | Lead / Architect | 25 | In Progress |
-| **15** | [15_Concurrency.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/15_Concurrency.md) | Lead / Architect | 25 | In Progress |
-| **16** | [16_Scaling_Strategies.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/16_Scaling_Strategies.md) | Lead / Architect | 25 | In Progress |
-| **17** | [17_ORM_Internals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/17_ORM_Internals.md) | Lead / Architect | 25 | In Progress |
-| **18** | [18_Architecture_Questions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/18_Architecture_Questions.md) | Lead / Architect | 25 | In Progress |
-| **19** | [19_Production_Issues.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/19_Production_Issues.md) | Lead / Architect | 25 | In Progress |
-| **20** | [20_Lead_Level_Scenarios.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/20_Lead_Level_Scenarios.md) | Lead / Architect | 25 | In Progress |
+| **01** | [01_ORM_Fundamentals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/01_ORM_Fundamentals.md) | Fundamental to Senior | 35 | Completed |
+| **02** | [02_Model_Design.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/02_Model_Design.md) | Senior | 35 | Completed |
+| **03** | [03_Field_Types.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/03_Field_Types.md) | Senior | 35 | Completed |
+| **04** | [04_Model_Meta_Options.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/04_Model_Meta_Options.md) | Senior | 35 | Completed |
+| **05** | [05_Managers_and_QuerySets.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/05_Managers_and_QuerySets.md) | Senior / Lead | 35 | Completed |
+| **06** | [06_Query_Optimization.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/06_Query_Optimization.md) | Senior / Lead | 35 | Completed |
+| **07** | [07_Relationships.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/07_Relationships.md) | Senior | 35 | Completed |
+| **08** | [08_Transactions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/08_Transactions.md) | Senior / Lead | 35 | Completed |
+| **09** | [09_Aggregation_and_Annotation.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/09_Aggregation_and_Annotation.md) | Senior / Lead | 35 | Completed |
+| **10** | [10_Subquery_and_Exists.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/10_Subquery_and_Exists.md) | Senior / Lead | 35 | Completed |
+| **11** | [11_Database_Functions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/11_Database_Functions.md) | Senior | 35 | Completed |
+| **12** | [12_Indexing.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/12_Indexing.md) | Senior / Lead | 35 | Completed |
+| **13** | [13_Migrations.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/13_Migrations.md) | Senior / Lead | 35 | Completed |
+| **14** | [14_Multi_Database.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/14_Multi_Database.md) | Lead / Architect | 35 | Completed |
+| **15** | [15_Concurrency.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/15_Concurrency.md) | Lead / Architect | 35 | Completed |
+| **16** | [16_Scaling_Strategies.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/16_Scaling_Strategies.md) | Lead / Architect | 35 | Completed |
+| **17** | [17_ORM_Internals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/17_ORM_Internals.md) | Lead / Architect | 35 | Completed |
+| **18** | [18_Architecture_Questions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/18_Architecture_Questions.md) | Lead / Architect | 35 | Completed |
+| **19** | [19_Production_Issues.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/19_Production_Issues.md) | Lead / Architect | 35 | Completed |
+| **20** | [20_Lead_Level_Scenarios.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/20_Lead_Level_Scenarios.md) | Lead / Architect | 35 | Completed |
 
 ---
 
