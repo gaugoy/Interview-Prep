@@ -1,6 +1,6 @@
 # Python — Concurrency (Threading, Multiprocessing, Async) & Memory Management
 
-Interview questions on how Python runs things in parallel and how it manages memory. Each answer: a clear explanation you can say out loud + a small example. **(Easy)** fundamentals · **(Medium)** asked in most senior interviews · **(Hard)** internals / deep follow-ups.
+Interview questions on how Python runs things in parallel and how it manages memory. Each answer: a clear explanation you can say out loud + a small example. Questions already answered in `python_react/` are **linked** (no duplicate answer) — some add one extra point. **(Easy)** fundamentals · **(Medium)** asked in most senior interviews · **(Hard)** internals / deep follow-ups.
 
 
 ## Table of Contents
@@ -96,23 +96,15 @@ Interview questions on how Python runs things in parallel and how it manages mem
 
 <a name="q3"></a>
 ## Q3. (Medium) What is the GIL (Global Interpreter Lock) and why does it exist?
-**Answer:** The GIL is a lock in CPython that allows **only one thread to execute Python bytecode at a time**. It exists because CPython's memory management (reference counting) isn't thread-safe — without the GIL, two threads changing an object's reference count at once could corrupt memory. The GIL makes the interpreter simpler and single-threaded code fast, at the cost of no parallel CPU work in threads.
-
-**Follow-up:** Does the GIL make my code thread-safe? → No. It protects interpreter internals, not your logic — a thread can be switched out in the middle of `count += 1`.
+**Answer:** Already answered in [01 · Q19](../python_react/01_Python_Fundamentals.md#q19-what-is-the-gil-global-interpreter-lock) — read it there.
+**Extra (not in that answer):** The GIL protects interpreter internals only — it does **not** make your own code thread-safe (`count += 1` can still race).
 
 ---
 
 <a name="q4"></a>
 ## Q4. (Medium) How does the GIL affect CPU-bound vs I/O-bound programs?
-**Answer:**
-- **I/O-bound** (network, disk, DB): a thread **releases the GIL while waiting** for I/O, so other threads run → threads/asyncio give a big speed-up.
-- **CPU-bound** (math, image processing, parsing): threads take turns holding the GIL → no speed-up (often slower due to switching). Use **multiprocessing** (or C extensions like NumPy that release the GIL).
-
-```python
-# I/O-bound: 10 downloads in ~1 second with threads instead of ~10 seconds sequentially
-with ThreadPoolExecutor(max_workers=10) as ex:
-    pages = list(ex.map(requests.get, urls))
-```
+**Answer:** Already answered in [01 · Q19](../python_react/01_Python_Fundamentals.md#q19-what-is-the-gil-global-interpreter-lock) — read it there.
+**Extra (not in that answer):** C extensions such as NumPy, and I/O calls, release the GIL — so heavy NumPy work can still use several threads.
 
 ---
 
@@ -124,13 +116,7 @@ with ThreadPoolExecutor(max_workers=10) as ex:
 
 <a name="q6"></a>
 ## Q6. (Easy) When do you use threading vs multiprocessing vs asyncio?
-**Answer:**
-| Workload | Best choice | Why |
-|---|---|---|
-| Many I/O calls, async libraries available (HTTP, DB) | **asyncio** | Thousands of tasks on one thread, very low overhead |
-| I/O with blocking/sync libraries | **threading** (`ThreadPoolExecutor`) | GIL released during I/O |
-| CPU-heavy work | **multiprocessing** (`ProcessPoolExecutor`) | Separate processes = separate GILs = real parallelism |
-| Mixed | asyncio + `to_thread` / process pool for heavy parts | Keep the event loop free |
+**Answer:** Already answered in [04 · Q11](../python_react/04_Functional_Advanced_Python.md#q11-what-is-the-difference-between-threading-multiprocessing-and-asyncio) and [01 · Q19](../python_react/01_Python_Fundamentals.md#q19-what-is-the-gil-global-interpreter-lock) — read it there.
 
 ---
 
@@ -263,19 +249,7 @@ def handle(request_id):
 
 <a name="q15"></a>
 ## Q15. (Easy) What is ThreadPoolExecutor and why use it instead of raw threads?
-**Answer:** `concurrent.futures.ThreadPoolExecutor` keeps a pool of reusable threads, gives you `Future` objects (results and exceptions), and cleans up automatically. Simpler and safer than managing threads yourself.
-
-```python
-from concurrent.futures import ThreadPoolExecutor, as_completed
-
-with ThreadPoolExecutor(max_workers=20) as ex:
-    futures = {ex.submit(fetch, url): url for url in urls}
-    for f in as_completed(futures):           # results as they finish
-        try:
-            print(futures[f], len(f.result()))
-        except Exception as e:
-            print("failed", futures[f], e)
-```
+**Answer:** Already answered in [04 · Q14](../python_react/04_Functional_Advanced_Python.md#q14-what-is-concurrentfutures) — read it there.
 
 ---
 
@@ -348,11 +322,8 @@ Set it with `multiprocessing.set_start_method("spawn")` or `get_context("spawn")
 
 <a name="q21"></a>
 ## Q21. (Medium) What is the difference between `map`, `submit` and `as_completed` in executors?
-**Answer:**
-- `ex.map(fn, items)` — returns results **in input order**; simple; an exception appears when you reach that item.
-- `ex.submit(fn, x)` — returns a `Future` for one call; flexible (different functions/args).
-- `as_completed(futures)` — yields futures **as they finish** (fastest first), good for progress and handling failures one by one.
-For many small CPU tasks, `map(..., chunksize=100)` reduces inter-process overhead.
+**Answer:** Already answered in [04 · Q14](../python_react/04_Functional_Advanced_Python.md#q14-what-is-concurrentfutures) — read it there.
+**Extra (not in that answer):** `map()` returns results in input order; for many tiny tasks on a process pool, pass `chunksize=` to cut pickling overhead.
 
 ---
 
@@ -366,53 +337,26 @@ For many small CPU tasks, `map(..., chunksize=100)` reduces inter-process overhe
 
 <a name="q23"></a>
 ## Q23. (Easy) What is asyncio and what is the event loop?
-**Answer:** `asyncio` is Python's library for **single-threaded concurrency** using coroutines. The **event loop** is a scheduler: it runs a task until the task `await`s something slow (network, sleep), then switches to another ready task, and resumes the first when its result is ready. So one thread can handle thousands of waiting I/O operations.
+**Answer:** Already answered in [04 · Q12](../python_react/04_Functional_Advanced_Python.md#q12-what-is-an-event-loop-in-asyncio-how-does-asyncawait-work) — read it there.
 
 ---
 
 <a name="q24"></a>
 ## Q24. (Easy) What is a coroutine? What do `async def` and `await` do?
-**Answer:** `async def` defines a **coroutine function**; calling it doesn't run it — it returns a coroutine object. `await` runs a coroutine (or other awaitable) and **pauses the current coroutine** until the result is ready, letting the event loop run other tasks meanwhile.
-
-```python
-import asyncio
-
-async def fetch_user(uid):
-    await asyncio.sleep(1)          # simulates a network call
-    return {"id": uid}
-
-async def main():
-    user = await fetch_user(1)
-    print(user)
-
-asyncio.run(main())                 # starts the event loop
-```
+**Answer:** Already answered in [04 · Q15](../python_react/04_Functional_Advanced_Python.md#q15-what-is-the-difference-between-async-def-and-a-regular-function) and [04 · Q13](../python_react/04_Functional_Advanced_Python.md#q13-what-is-a-coroutine-how-is-it-different-from-a-thread) — read it there.
 
 ---
 
 <a name="q25"></a>
 ## Q25. (Medium) How does `await` work under the hood?
-**Answer:** Coroutines are built on generators: at an `await`, the coroutine **yields control** back to the event loop along with a Future it's waiting for. The loop registers interest in that I/O (via the OS selector — epoll/kqueue), runs other ready tasks, and when the I/O completes it sets the Future's result and resumes the coroutine right after the `await`. It's **cooperative**: a task only gives up control at an `await`.
+**Answer:** Already answered in [04 · Q12](../python_react/04_Functional_Advanced_Python.md#q12-what-is-an-event-loop-in-asyncio-how-does-asyncawait-work) — read it there.
+**Extra (not in that answer):** Under the hood a coroutine yields a Future to the loop at each `await`; the loop waits on the OS selector (epoll/kqueue) and resumes the coroutine when the result is set.
 
 ---
 
 <a name="q26"></a>
 ## Q26. (Easy) How do you run multiple coroutines concurrently?
-**Answer:** Awaiting one after another runs them **sequentially**. Use `asyncio.gather()` or tasks to run them concurrently.
-
-```python
-async def main():
-    # sequential: ~3 seconds
-    a = await fetch_user(1); b = await fetch_user(2); c = await fetch_user(3)
-
-    # concurrent: ~1 second
-    a, b, c = await asyncio.gather(fetch_user(1), fetch_user(2), fetch_user(3))
-
-    # create_task: start now, await later
-    task = asyncio.create_task(fetch_user(4))
-    do_other_work()
-    d = await task
-```
+**Answer:** Already answered in [04 · Q12](../python_react/04_Functional_Advanced_Python.md#q12-what-is-an-event-loop-in-asyncio-how-does-asyncawait-work) — read it there.
 
 ---
 
@@ -526,14 +470,8 @@ async def main(items):
 
 <a name="q33"></a>
 ## Q33. (Medium) What is the difference between threads and asyncio?
-**Answer:**
-| | Threads | asyncio |
-|---|---|---|
-| Switching | **Preemptive** — the OS/interpreter can switch at any point | **Cooperative** — switches only at `await` |
-| Race conditions | Anywhere → need locks | Only across `await` points → fewer bugs |
-| Scale | Hundreds of threads (memory per thread) | Tens of thousands of tasks (cheap) |
-| Libraries | Works with any blocking library | Needs async libraries (or `to_thread`) |
-| CPU work | Limited by GIL | Blocks the loop — offload it |
+**Answer:** Already answered in [04 · Q13](../python_react/04_Functional_Advanced_Python.md#q13-what-is-a-coroutine-how-is-it-different-from-a-thread) — read it there.
+**Extra (not in that answer):** Key line for interviews: threads are switched **preemptively** (any time → need locks); asyncio switches **cooperatively** only at `await`.
 
 ---
 
@@ -583,49 +521,27 @@ async def main(items):
 
 <a name="q39"></a>
 ## Q39. (Medium) How does Python manage memory?
-**Answer:** All objects live on a **private heap** managed by the interpreter.
-- **Allocation:** small objects (≤ 512 bytes) come from Python's own allocator **pymalloc** (memory grouped into arenas → pools → blocks, fast and less fragmentation); bigger ones from the system `malloc`.
-- **Freeing:** mainly **reference counting** — an object is freed immediately when its count reaches 0.
-- **Cycles:** a **garbage collector** finds groups of objects that reference each other but are unreachable.
-You don't manage memory manually, but you control it by how long you keep references.
+**Answer:** Already answered in [01 · Q31](../python_react/01_Python_Fundamentals.md#q31-what-is-pythons-memory-management-model) — read it there.
+**Extra (not in that answer):** Small objects come from **pymalloc** (arenas → pools → blocks); see Q53 for why memory isn't always returned to the OS.
 
 ---
 
 <a name="q40"></a>
 ## Q40. (Easy) What is reference counting?
-**Answer:** Every object keeps a count of how many references point to it. Assigning it to a variable, putting it in a list, or passing it to a function increases the count; `del`, reassignment or leaving scope decreases it. At 0 the object is freed **immediately** — that's why files are closed promptly in CPython when the last reference goes away.
-
-```python
-import sys
-a = []
-b = a
-print(sys.getrefcount(a))   # 3 → a, b, and the temporary argument to getrefcount
-del b
-print(sys.getrefcount(a))   # 2
-```
+**Answer:** Already answered in [01 · Q31](../python_react/01_Python_Fundamentals.md#q31-what-is-pythons-memory-management-model) — read it there.
 
 ---
 
 <a name="q41"></a>
 ## Q41. (Medium) Why does Python need a garbage collector if it has reference counting?
-**Answer:** Reference counting can't free **reference cycles**: objects that point to each other keep each other's count above 0 even when nothing else uses them.
-
-```python
-class Node:
-    def __init__(self):
-        self.other = None
-
-a, b = Node(), Node()
-a.other, b.other = b, a     # cycle
-del a, b                    # counts never reach 0 → only the cyclic GC can free them
-```
-The `gc` module periodically finds such unreachable groups and frees them.
+**Answer:** Already answered in [01 · Q32](../python_react/01_Python_Fundamentals.md#q32-what-is-a-circular-reference-how-does-python-handle-it) — read it there.
 
 ---
 
 <a name="q42"></a>
 ## Q42. (Medium) How does the generational garbage collector work?
-**Answer:** The cyclic GC tracks container objects (lists, dicts, class instances). It's **generational**, based on the idea that most objects die young: new objects go into the youngest generation, which is checked often; objects that survive are promoted to older generations that are checked rarely. A collection is triggered when allocations minus deallocations exceed a threshold (`gc.get_threshold()`). Classic CPython used three generations (0, 1, 2); Python 3.14 made the collector **incremental** with a young and an old generation, to reduce pause times.
+**Answer:** Already answered in [01 · Q32](../python_react/01_Python_Fundamentals.md#q32-what-is-a-circular-reference-how-does-python-handle-it) — read it there.
+**Extra (not in that answer):** Python 3.14 replaced the classic 3-generation collector with an **incremental** GC (young + old generations) to shorten pauses.
 
 ---
 
@@ -689,45 +605,20 @@ del img                   # image freed; "a" disappears from the cache automatic
 
 <a name="q47"></a>
 ## Q47. (Medium) What are `__slots__` and how do they save memory?
-**Answer:** Normally each instance stores its attributes in a per-instance `__dict__`. Declaring `__slots__` stores attributes in fixed slots instead — no `__dict__`, so each instance uses noticeably less memory and attribute access is slightly faster. Useful when creating millions of small objects. Downside: you can't add new attributes dynamically.
-
-```python
-class Point:
-    __slots__ = ("x", "y")
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-# Point(1, 2).z = 3  → AttributeError
-```
-(`@dataclass(slots=True)` does the same for dataclasses.)
+**Answer:** Already answered in [01 · Q33](../python_react/01_Python_Fundamentals.md#q33-what-is-__slots__-when-would-you-use-it) — read it there.
+**Extra (not in that answer):** `@dataclass(slots=True)` (3.10+) generates `__slots__` for you.
 
 ---
 
 <a name="q48"></a>
 ## Q48. (Easy) What is integer caching / string interning? What is the difference between `is` and `==`?
-**Answer:** CPython pre-creates small integers **-5 to 256** and reuses them, and **interns** some strings (identifier-like literals, `sys.intern()`), so the same object is reused instead of allocating a new one. `==` compares **values**; `is` compares **identity** (same object in memory). Because of caching, `a is b` may be `True` for small ints and `False` for large ones — so use `is` only for `None`, `True`/`False`, and sentinels.
-
-```python
-a = 256; b = 256
-a is b          # True  (cached)
-a = 1000; b = int("1000")
-a is b          # False (different objects)
-a == b          # True
-```
+**Answer:** Already answered in [01 · Q1](../python_react/01_Python_Fundamentals.md#q1-what-is-the-difference-between-is-and--in-python) — read it there.
 
 ---
 
 <a name="q49"></a>
 ## Q49. (Easy) What is the difference between shallow copy and deep copy?
-**Answer:** Assignment (`b = a`) copies the **reference** — same object. `copy.copy()` (shallow) creates a new outer object but **shares the inner objects**. `copy.deepcopy()` recursively copies everything.
-
-```python
-import copy
-a = [[1, 2], [3]]
-s = copy.copy(a); d = copy.deepcopy(a)
-a[0].append(99)
-s[0]    # [1, 2, 99] — shared inner list
-d[0]    # [1, 2]     — independent
-```
+**Answer:** Already answered in [01 · Q11](../python_react/01_Python_Fundamentals.md#q11-what-is-the-difference-between-deepcopy-and-shallow-copy) — read it there.
 
 ---
 
@@ -744,17 +635,7 @@ sys.getsizeof(["x" * 10_000] * 3)      # same small number — the big string is
 
 <a name="q51"></a>
 ## Q51. (Easy) How do generators help with memory?
-**Answer:** A generator produces values **one at a time, on demand**, instead of building the whole list in memory. Processing a 10 GB file or millions of DB rows with a generator keeps memory flat.
-
-```python
-def read_large_file(path):
-    with open(path) as f:
-        for line in f:           # one line in memory at a time
-            yield line.strip()
-
-total = sum(len(line) for line in read_large_file("big.log"))   # generator expression
-```
-`[x for x in ...]` builds a full list; `(x for x in ...)` is lazy.
+**Answer:** Already answered in [04 · Q2](../python_react/04_Functional_Advanced_Python.md#q2-what-is-a-generator-how-is-it-different-from-a-regular-function) and [04 · Q5](../python_react/04_Functional_Advanced_Python.md#q5-what-is-a-generator-expression-vs-a-list-comprehension) — read it there.
 
 ---
 
