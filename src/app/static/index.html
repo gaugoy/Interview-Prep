@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interview Prep Viewer</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>" />
+
+  <!-- Apply the saved theme before first paint (avoids a light/dark flash). -->
+  <script>
+    (function () {
+      var t = localStorage.getItem("prep.theme");
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+
+  <!-- highlight.js themes (pinned). app.js enables the one matching the theme. -->
+  <link id="hljs-light" rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/github.min.css" />
+  <link id="hljs-dark" rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/github-dark.min.css" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#/" onclick="document.getElementById('main').focus();return false;">Skip to content</a>
+
+  <!-- Shared gradient for the progress rings (referenced as url(#ring-grad)). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" style="stop-color: var(--accent)" />
+        <stop offset="100%" style="stop-color: var(--accent-2)" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <button class="icon-btn only-mobile" id="menu-btn" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <a class="brand" href="#/" aria-label="Interview Prep — dashboard">
+      <span class="brand-mark" aria-hidden="true">◆</span>
+      <span class="brand-name">Interview&nbsp;Prep</span>
+    </a>
+
+    <div class="search" role="search">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input id="search" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Search questions…" aria-label="Search questions by title" />
+      <kbd class="search-kbd" aria-hidden="true">/</kbd>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="icon-btn" id="rescan-btn" title="Re-scan markdown files" aria-label="Re-scan markdown files">⟳</button>
+      <button class="icon-btn" id="theme-btn" title="Toggle light / dark" aria-label="Toggle light or dark theme">◐</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Topics and files">
+      <div class="sidebar-inner" id="sidebar-inner">
+        <div class="skeleton">Loading topics…</div>
+      </div>
+    </nav>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main id="main" class="main" tabindex="-1">
+      <div class="loading">Loading…</div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Markdown + syntax highlighting from a CDN, pinned to exact versions.
+       Offline? Drop the same two files into static/vendor/ and they are
+       picked up automatically by the fallback lines below. -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/highlight.min.js"></script>
+  <script>
+    if (!window.marked) document.write('<script src="/static/vendor/marked.min.js"><\/script>');
+    if (!window.hljs) document.write('<script src="/static/vendor/highlight.min.js"><\/script>');
+  </script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
