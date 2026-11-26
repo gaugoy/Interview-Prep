@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Content checks before every commit (≈0.5 s). Enable once per clone:
+#   git config core.hooksPath .githooks
+# Skip in an emergency with: git commit --no-verify
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+if ! git diff --cached --name-only | grep -qE '\.md$|^tools/|^src/app/parser\.py$'; then
+  exit 0
+fi
+python3 tools/build_index.py >/dev/null
+git add index/catalog.json index/INDEX.md AGENT_INDEX.md
+python3 tools/validate.py | grep -E "^ERROR|error\(s\)"

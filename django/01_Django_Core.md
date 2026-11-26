@@ -1,5 +1,5 @@
 # 🏗️ 01 — Django Core Concepts
-### [← Back to Index](./README.md)
+### [← Back to Index](./index.md)
 
 ---
 
@@ -1567,4 +1567,4 @@ def my_view(request):
 
 ---
 
-### [← Back to Index](./README.md) | [Next: Django ORM →](./02_Django_ORM.md)
+### [← Back to Index](./index.md) | [Next: Django ORM →](./02_Django_ORM.md)
