@@ -1,0 +1,20 @@
+name: content-checks
+
+on:
+  push:
+    paths: ["**.md", "tools/**", "src/app/parser.py", ".github/workflows/content-checks.yml"]
+  pull_request:
+    paths: ["**.md", "tools/**", "src/app/parser.py", ".github/workflows/content-checks.yml"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Index is up to date
+        run: python3 tools/build_index.py --check
+      - name: Validate content (anchors, links, titles, code, banks)
+        run: python3 tools/validate.py
