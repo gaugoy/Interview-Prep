@@ -6,8 +6,9 @@ tools, the FastAPI app and the agent all see the same questions and the same sta
 | Command | What it does | When |
 |---|---|---|
 | `python3 tools/find.py <words> [--stack X] [--file F] [--level hard] [--thin] [--asked]` | Search question titles via `index/catalog.json`; prints `file:line` to open just that block | Before adding (duplicate check) or editing |
-| `python3 tools/build_index.py` | Regenerates `index/catalog.json`, `index/INDEX.md` and the live-counts block in `AGENT_INDEX.md` | After content changes (hooks run it) |
+| `python3 tools/build_index.py` | Regenerates `index/catalog.json`, `index/INDEX.md`, the live-counts block in `AGENT_INDEX.md` and the live blocks of the root `README.md` (contents table + counts, at-a-glance, question badge — see `tools/readme_gen.py`) | After content changes (hooks run it) |
 | `python3 tools/build_index.py --check` | Fails if the generated files are stale; lists question ids that disappeared (title edits) | CI / pre-commit |
+| `python3 tools/release_notes.py [--from-ref <tag>] [--out notes.md]` | Added / updated / removed questions since a release tag (by id + content hash); exit 3 = no changes | Preview locally; CI publishes it as a GitHub Release on every push to `main` |
 | `python3 tools/validate.py [--file F] [--changed] [--strict]` | Anchors, `**Answer:**`, python code parse, link + anchor existence, link-title drift, question-bank sync, duplicate titles | After every edit (hooks), before commit |
 
 **Per-stack rules** live in one place: `STACKS` in `tools/catalog.py` (anchors required? `**Answer:**`
@@ -18,7 +19,8 @@ required? code errors or warnings? which bank? default review status). Add a new
   `tools/hooks/post_edit.py` validates that file and feeds errors back to the agent; on Stop →
   `tools/hooks/on_stop.py` rebuilds the index and validates changed files.
 - Git: `git config core.hooksPath .githooks` enables `.githooks/pre-commit` (rebuild index + validate).
-- CI: `.github/workflows/content-checks.yml` runs `build_index.py --check` and `validate.py`.
+- CI: `.github/workflows/content-checks.yml` runs `build_index.py --check` and `validate.py`;
+  `.github/workflows/release-notes.yml` publishes a GitHub Release (release notes) on every push to `main` that changes questions.
 
 **Warnings vs errors:** errors block (hooks, commit, CI). Warnings are known content debt, e.g. broken
 code in the templated `Django ORM/` modules — they disappear as modules are rewritten.
