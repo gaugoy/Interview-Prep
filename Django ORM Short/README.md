@@ -16,7 +16,7 @@ Same questions as [`../Django ORM/`](../Django%20ORM/README.md), but **short boo
 | 05 | [Managers & QuerySets](./05_Managers_and_QuerySets.md) | 35 | ✅ Ready | [long](../Django%20ORM/05_Managers_and_QuerySets.md) |
 | 06 | [Query Optimization](./06_Query_Optimization.md) | 39 | ✅ Ready | [long](../Django%20ORM/06_Query_Optimization.md) |
 | 07 | [Relationships & Joins](./07_Relationships.md) | 35 | ✅ Ready | [long](../Django%20ORM/07_Relationships.md) |
-| 08 | [Transactions](./08_Transactions.md) | 35 | ✅ Ready | [long](../Django%20ORM/08_Transactions.md) |
+| 08 | [Transactions](./08_Transactions.md) | 36 | ✅ Ready | [long](../Django%20ORM/08_Transactions.md) |
 | 09 | [Aggregation & Annotation](./09_Aggregation_and_Annotation.md) | 35 | ✅ Ready | [long](../Django%20ORM/09_Aggregation_and_Annotation.md) |
 | 10 | [Subquery & Exists](./10_Subquery_and_Exists.md) | 35 | ✅ Ready | [long](../Django%20ORM/10_Subquery_and_Exists.md) |
 | 11 | [Database Functions](./11_Database_Functions.md) | 35 | ✅ Ready | [long](../Django%20ORM/11_Database_Functions.md) |
@@ -30,4 +30,4 @@ Same questions as [`../Django ORM/`](../Django%20ORM/README.md), but **short boo
 | 19 | [Production Issues & Debugging](./19_Production_Issues.md) | 35 | ✅ Ready | [long](../Django%20ORM/19_Production_Issues.md) |
 | 20 | [Lead-Level Scenarios](./20_Lead_Level_Scenarios.md) | 35 | ✅ Ready | [long](../Django%20ORM/20_Lead_Level_Scenarios.md) |
 
-All 20 modules (704 questions) are ready. To fix or extend them, say **"Django Short"** (see `PROMPTS.md`).
+All 20 modules (705 questions) are ready. Questions I was asked in real interviews are marked **⭐ Asked in my interview** and listed in [`../My_Interview_Questions.md`](../My_Interview_Questions.md). To fix or extend them, say **"Django Short"** (see `PROMPTS.md`).

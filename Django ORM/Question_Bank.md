@@ -1,6 +1,6 @@
 # Django ORM Master Question Bank (Questions Only)
 
-This document lists all 704 senior, lead, and architect-level Django ORM interview questions, organized by module (modules have 35 questions each, except Module 06 which has 39).
+This document lists all 705 senior, lead, and architect-level Django ORM interview questions, organized by module (modules have 35 questions each, except Module 06 which has 39 and Module 08 which has 36).
 
 ---
 
@@ -325,6 +325,7 @@ This document lists all 704 senior, lead, and architect-level Django ORM intervi
 33. Explain the role of atomic block savepoint creation logic.
 34. How do you monitor transaction execution duration in production APMs?
 35. What is the impact of database connection disconnect on active transactions?
+36. How does Django handle the ACID properties of a database transaction?
 
 ---
 

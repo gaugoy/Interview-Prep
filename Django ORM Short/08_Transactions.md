@@ -37,6 +37,7 @@
 33. (Hard) [Explain the role of atomic block savepoint creation logic.](#q33)
 34. (Medium) [How do you monitor transaction execution duration in production APMs?](#q34)
 35. (Medium) [What is the impact of database connection disconnect on active transactions?](#q35)
+36. (Medium) [How does Django handle the ACID properties of a database transaction? ⭐ Asked in my interview](#q36)
 
 ---
 
@@ -322,3 +323,42 @@ Useful in helpers that require a transaction, e.g. `assert connection.in_atomic_
 <a name="q35"></a>
 ## Q35. (Medium) What is the impact of database connection disconnect on active transactions?
 **Answer:** The database rolls back the uncommitted transaction. Django raises `OperationalError`/`InterfaceError`, marks the connection unusable, and replaces it at the next request. Nothing is committed, so you can safely retry the whole unit of work (if it's idempotent).
+
+---
+
+<a name="q36"></a>
+## Q36. (Medium) How does Django handle the ACID properties of a database transaction? ⭐ Asked in my interview
+**Answer:** ACID is guaranteed by the **database** (PostgreSQL, MySQL InnoDB, SQL Server); Django doesn't implement it, it gives you the tools to **use** it correctly.
+
+| Property | Meaning | Who guarantees it | What you use in Django |
+|---|---|---|---|
+| **A**tomicity | All statements succeed or none do | DB (COMMIT / ROLLBACK) | `transaction.atomic()`, savepoints, `ATOMIC_REQUESTS` |
+| **C**onsistency | Data always moves from one valid state to another | DB constraints + your rules | `unique`, FK, `CheckConstraint`, `UniqueConstraint`, `full_clean()` |
+| **I**solation | Concurrent transactions don't see each other's half-done work | DB isolation level + locks | `isolation_level` setting, `select_for_update()`, `F()` |
+| **D**urability | Once committed, data survives a crash | DB (write-ahead log, disk flush, replication) | `transaction.on_commit()` for side effects |
+
+**Atomicity** — By default Django is in **autocommit**: every single query commits on its own, so two `save()` calls are *not* atomic together. Wrap related writes in `atomic()`: the outer block runs `BEGIN … COMMIT`, any exception → `ROLLBACK`; nested blocks become savepoints, so an inner failure can be undone alone.
+
+```python
+from django.db import transaction
+from django.db.models import F
+
+def transfer(from_id, to_id, amount):
+    with transaction.atomic():                                   # Atomicity
+        src = Account.objects.select_for_update().get(pk=from_id)    # Isolation (row lock)
+        if src.balance < amount:
+            raise ValueError("Insufficient funds")               # → ROLLBACK, nothing saved
+        Account.objects.filter(pk=from_id).update(balance=F("balance") - amount)
+        Account.objects.filter(pk=to_id).update(balance=F("balance") + amount)
+        transaction.on_commit(lambda: notify_transfer.delay(from_id, to_id))   # after Durability
+```
+
+**Consistency** — The database rejects invalid data via constraints (NOT NULL, unique, foreign key, check) and raises `IntegrityError`; inside `atomic()` that rolls back the whole transaction. Define rules as DB constraints (`CheckConstraint(condition=Q(balance__gte=0), name="balance_non_negative")`). Django's `full_clean()` validation is app-level and **not** called by `save()` — so the DB constraint is the real guarantee.
+
+**Isolation** — Controlled by the database's isolation level (PostgreSQL default **Read Committed**; Django's MySQL backend also uses Read Committed). Change it in `DATABASES["OPTIONS"]["isolation_level"]` (e.g. Serializable — then retry serialization errors). Within Read Committed, protect read-modify-write code with `select_for_update()` (pessimistic lock), `F()` expressions (atomic in-DB update), or a version field (optimistic lock).
+
+**Durability** — Once `COMMIT` returns, the database has written it to its write-ahead log on disk, so a crash won't lose it; replicas/backups add more safety. Django's job is to know **when** the commit happened: run emails, Celery tasks and API calls in `transaction.on_commit()`, never inside the block — otherwise they could fire for data that later rolls back.
+
+**Gotcha:** ACID covers **one database**. With multiple databases (`atomic(using="other")`), there's no atomicity across them — use the outbox/saga pattern.
+**Follow-up:** Is `model.save()` atomic? → A single `save()` is (one statement; multi-table inheritance saves are wrapped in a transaction internally), but several `save()` calls are only atomic together inside `atomic()`.
+
