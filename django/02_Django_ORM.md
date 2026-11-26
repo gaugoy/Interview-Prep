@@ -1,5 +1,5 @@
 # 🗄️ 02 — Django ORM
-### [← Back to Index](./README.md)
+### [← Back to Index](./index.md)
 
 ---
 
@@ -1229,4 +1229,4 @@ Article.objects.values_list('id', flat=True)  # Flat list of IDs
 
 ---
 
-### [← Back to Index](./README.md) | [Next: Django REST Framework →](./03_DRF.md)
+### [← Back to Index](./index.md) | [Next: Django REST Framework →](./03_DRF.md)

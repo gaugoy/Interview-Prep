@@ -1,5 +1,5 @@
 # 🔌 03 — Django REST Framework (DRF)
-### [← Back to Index](./README.md)
+### [← Back to Index](./index.md)
 
 ---
 
@@ -1493,7 +1493,7 @@ REST_FRAMEWORK = {
 
 ---
 
-### [← Back to Index](./README.md)
+### [← Back to Index](./index.md)
 
 ---
 
