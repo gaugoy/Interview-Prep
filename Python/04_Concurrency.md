@@ -1,11 +1,13 @@
-# Python — Concurrency (Threading, Multiprocessing, Async) & Memory Management
+# Concurrency: GIL, Threading, Multiprocessing & asyncio
+### [← Python index](./README.md) · [Question Bank](./Question_Bank.md)
 
-Interview questions on how Python runs things in parallel and how it manages memory. Each answer: a clear explanation you can say out loud + a small example. Questions already answered in `python_react/` are **linked** (no duplicate answer) — some add one extra point. **(Easy)** fundamentals · **(Medium)** asked in most senior interviews · **(Hard)** internals / deep follow-ups.
+How Python runs work in parallel or concurrently, and how to choose and use each tool.
 
+**Topics:** [Fundamentals](./01_Fundamentals.md) · [OOP](./02_OOP.md) · [Functional](./03_Functional_and_Decorators.md) · [Concurrency](./04_Concurrency.md) · [Memory](./05_Memory_Management.md) · [DSA](./06_DSA.md) · [Data & AI](./07_Data_and_AI.md) · [Testing](./08_Testing_and_Tooling.md)
 
 ## Table of Contents
 
-**Part A — Concurrency Basics & the GIL**
+**Part A — Concurrency basics & the GIL**
 1. (Easy) [What is the difference between concurrency and parallelism?](#q1)
 2. (Easy) [What is the difference between a process and a thread?](#q2)
 3. (Medium) [What is the GIL (Global Interpreter Lock) and why does it exist?](#q3)
@@ -33,7 +35,7 @@ Interview questions on how Python runs things in parallel and how it manages mem
 21. (Medium) [What is the difference between `map`, `submit` and `as_completed` in executors?](#q21)
 22. (Medium) [When is multiprocessing a bad idea?](#q22)
 
-**Part D — Async Programming (asyncio, async/await)**
+**Part D — Async programming (asyncio, async/await)**
 23. (Easy) [What is asyncio and what is the event loop?](#q23)
 24. (Easy) [What is a coroutine? What do `async def` and `await` do?](#q24)
 25. (Medium) [How does `await` work under the hood?](#q25)
@@ -48,32 +50,14 @@ Interview questions on how Python runs things in parallel and how it manages mem
 34. (Medium) [How is async used in Django and FastAPI?](#q34)
 35. (Medium) [What are common asyncio mistakes?](#q35)
 
-**Part E — Scenario Questions**
+**Part E — Scenario questions**
 36. (Medium) [A web API must resize uploaded images (CPU-heavy). How do you design it?](#q36)
 37. (Medium) [You need to call 5 external APIs for one request. How do you make it fast?](#q37)
 38. (Hard) [A Python service is stuck / hanging in production. How do you debug it?](#q38)
 
-**Part F — Memory Management**
-39. (Medium) [How does Python manage memory?](#q39)
-40. (Easy) [What is reference counting?](#q40)
-41. (Medium) [Why does Python need a garbage collector if it has reference counting?](#q41)
-42. (Medium) [How does the generational garbage collector work?](#q42)
-43. (Medium) [What can you do with the `gc` module? When would you tune it?](#q43)
-44. (Medium) [What causes memory leaks in Python?](#q44)
-45. (Medium) [How do you find a memory leak in a Python application?](#q45)
-46. (Medium) [What is a weak reference and when do you use it?](#q46)
-47. (Medium) [What are `__slots__` and how do they save memory?](#q47)
-48. (Easy) [What is integer caching / string interning? What is the difference between `is` and `==`?](#q48)
-49. (Easy) [What is the difference between shallow copy and deep copy?](#q49)
-50. (Medium) [Does `sys.getsizeof()` show the real memory used by an object?](#q50)
-51. (Easy) [How do generators help with memory?](#q51)
-52. (Medium) [What is `__del__` and why should you be careful with it?](#q52)
-53. (Hard) [Does Python release memory back to the operating system?](#q53)
-54. (Hard) [How does memory behave with multiprocessing and `fork` (copy-on-write)?](#q54)
-
 ---
 
-## Part A — Concurrency Basics & the GIL
+## Part A — Concurrency basics & the GIL
 
 <a name="q1"></a>
 ## Q1. (Easy) What is the difference between concurrency and parallelism?
@@ -96,15 +80,25 @@ Interview questions on how Python runs things in parallel and how it manages mem
 
 <a name="q3"></a>
 ## Q3. (Medium) What is the GIL (Global Interpreter Lock) and why does it exist?
-**Answer:** Already answered in [01 · Q19](../python_react/01_Python_Fundamentals.md#q19-what-is-the-gil-global-interpreter-lock) — read it there.
-**Extra (not in that answer):** The GIL protects interpreter internals only — it does **not** make your own code thread-safe (`count += 1` can still race).
+**Answer:** The GIL is a lock in CPython that allows **only one thread to execute Python bytecode at a time**. It exists because CPython's memory management (reference counting) isn't thread-safe — without the GIL, two threads changing an object's reference count at once could corrupt memory. The GIL makes the interpreter simpler and single-threaded code fast, at the cost of no parallel CPU work in threads.
+
+**Follow-up:** Does the GIL make my code thread-safe? → No. It protects interpreter internals, not your logic — a thread can be switched out in the middle of `count += 1`.
+
+**Related:** [Memory · Q2](./05_Memory_Management.md#q2) — What is reference counting?
 
 ---
 
 <a name="q4"></a>
 ## Q4. (Medium) How does the GIL affect CPU-bound vs I/O-bound programs?
-**Answer:** Already answered in [01 · Q19](../python_react/01_Python_Fundamentals.md#q19-what-is-the-gil-global-interpreter-lock) — read it there.
-**Extra (not in that answer):** C extensions such as NumPy, and I/O calls, release the GIL — so heavy NumPy work can still use several threads.
+**Answer:**
+- **I/O-bound** (network, disk, DB): a thread **releases the GIL while waiting** for I/O, so other threads run → threads/asyncio give a big speed-up.
+- **CPU-bound** (math, image processing, parsing): threads take turns holding the GIL → no speed-up (often slower due to switching). Use **multiprocessing** (or C extensions like NumPy that release the GIL).
+
+```python
+# I/O-bound: 10 downloads in ~1 second with threads instead of ~10 seconds sequentially
+with ThreadPoolExecutor(max_workers=10) as ex:
+    pages = list(ex.map(requests.get, urls))
+```
 
 ---
 
@@ -116,7 +110,13 @@ Interview questions on how Python runs things in parallel and how it manages mem
 
 <a name="q6"></a>
 ## Q6. (Easy) When do you use threading vs multiprocessing vs asyncio?
-**Answer:** Already answered in [04 · Q11](../python_react/04_Functional_Advanced_Python.md#q11-what-is-the-difference-between-threading-multiprocessing-and-asyncio) and [01 · Q19](../python_react/01_Python_Fundamentals.md#q19-what-is-the-gil-global-interpreter-lock) — read it there.
+**Answer:**
+| Workload | Best choice | Why |
+|---|---|---|
+| Many I/O calls, async libraries available (HTTP, DB) | **asyncio** | Thousands of tasks on one thread, very low overhead |
+| I/O with blocking/sync libraries | **threading** (`ThreadPoolExecutor`) | GIL released during I/O |
+| CPU-heavy work | **multiprocessing** (`ProcessPoolExecutor`) | Separate processes = separate GILs = real parallelism |
+| Mixed | asyncio + `to_thread` / process pool for heavy parts | Keep the event loop free |
 
 ---
 
@@ -249,7 +249,19 @@ def handle(request_id):
 
 <a name="q15"></a>
 ## Q15. (Easy) What is ThreadPoolExecutor and why use it instead of raw threads?
-**Answer:** Already answered in [04 · Q14](../python_react/04_Functional_Advanced_Python.md#q14-what-is-concurrentfutures) — read it there.
+**Answer:** `concurrent.futures.ThreadPoolExecutor` keeps a pool of reusable threads, gives you `Future` objects (results and exceptions), and cleans up automatically. Simpler and safer than managing threads yourself.
+
+```python
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+with ThreadPoolExecutor(max_workers=20) as ex:
+    futures = {ex.submit(fetch, url): url for url in urls}
+    for f in as_completed(futures):           # results as they finish
+        try:
+            print(futures[f], len(f.result()))
+        except Exception as e:
+            print("failed", futures[f], e)
+```
 
 ---
 
@@ -306,6 +318,8 @@ if __name__ == "__main__":
 - **forkserver** — a clean server process forks workers on request (safe and reasonably fast). Default on Linux since Python 3.14 (was `fork` before).
 Set it with `multiprocessing.set_start_method("spawn")` or `get_context("spawn")`.
 
+**Related:** [Memory · Q11](./05_Memory_Management.md#q11) — How does memory behave with multiprocessing and `fork` (copy-on-write)?
+
 ---
 
 <a name="q19"></a>
@@ -322,8 +336,11 @@ Set it with `multiprocessing.set_start_method("spawn")` or `get_context("spawn")
 
 <a name="q21"></a>
 ## Q21. (Medium) What is the difference between `map`, `submit` and `as_completed` in executors?
-**Answer:** Already answered in [04 · Q14](../python_react/04_Functional_Advanced_Python.md#q14-what-is-concurrentfutures) — read it there.
-**Extra (not in that answer):** `map()` returns results in input order; for many tiny tasks on a process pool, pass `chunksize=` to cut pickling overhead.
+**Answer:**
+- `ex.map(fn, items)` — returns results **in input order**; simple; an exception appears when you reach that item.
+- `ex.submit(fn, x)` — returns a `Future` for one call; flexible (different functions/args).
+- `as_completed(futures)` — yields futures **as they finish** (fastest first), good for progress and handling failures one by one.
+For many small CPU tasks, `map(..., chunksize=100)` reduces inter-process overhead.
 
 ---
 
@@ -333,30 +350,61 @@ Set it with `multiprocessing.set_start_method("spawn")` or `get_context("spawn")
 
 ---
 
-## Part D — Async Programming (asyncio, async/await)
+## Part D — Async programming (asyncio, async/await)
 
 <a name="q23"></a>
 ## Q23. (Easy) What is asyncio and what is the event loop?
-**Answer:** Already answered in [04 · Q12](../python_react/04_Functional_Advanced_Python.md#q12-what-is-an-event-loop-in-asyncio-how-does-asyncawait-work) — read it there.
+**Answer:** `asyncio` is Python's library for **single-threaded concurrency** using coroutines. The **event loop** is a scheduler: it runs a task until the task `await`s something slow (network, sleep), then switches to another ready task, and resumes the first when its result is ready. So one thread can handle thousands of waiting I/O operations.
 
 ---
 
 <a name="q24"></a>
 ## Q24. (Easy) What is a coroutine? What do `async def` and `await` do?
-**Answer:** Already answered in [04 · Q15](../python_react/04_Functional_Advanced_Python.md#q15-what-is-the-difference-between-async-def-and-a-regular-function) and [04 · Q13](../python_react/04_Functional_Advanced_Python.md#q13-what-is-a-coroutine-how-is-it-different-from-a-thread) — read it there.
+**Answer:** `async def` defines a **coroutine function**; calling it doesn't run it — it returns a coroutine object. `await` runs a coroutine (or other awaitable) and **pauses the current coroutine** until the result is ready, letting the event loop run other tasks meanwhile.
+
+```python
+import asyncio
+
+async def fetch_user(uid):
+    await asyncio.sleep(1)          # simulates a network call
+    return {"id": uid}
+
+async def main():
+    user = await fetch_user(1)
+    print(user)
+
+asyncio.run(main())                 # starts the event loop
+```
+
+**Related:** [Functional · Q18](./03_Functional_and_Decorators.md#q18) — How do you write a decorator for async functions?
 
 ---
 
 <a name="q25"></a>
 ## Q25. (Medium) How does `await` work under the hood?
-**Answer:** Already answered in [04 · Q12](../python_react/04_Functional_Advanced_Python.md#q12-what-is-an-event-loop-in-asyncio-how-does-asyncawait-work) — read it there.
-**Extra (not in that answer):** Under the hood a coroutine yields a Future to the loop at each `await`; the loop waits on the OS selector (epoll/kqueue) and resumes the coroutine when the result is set.
+**Answer:** Coroutines are built on generators: at an `await`, the coroutine **yields control** back to the event loop along with a Future it's waiting for. The loop registers interest in that I/O (via the OS selector — epoll/kqueue), runs other ready tasks, and when the I/O completes it sets the Future's result and resumes the coroutine right after the `await`. It's **cooperative**: a task only gives up control at an `await`.
+
+**Related:** [Functional · Q9](./03_Functional_and_Decorators.md#q9) — What is `yield from`?
 
 ---
 
 <a name="q26"></a>
 ## Q26. (Easy) How do you run multiple coroutines concurrently?
-**Answer:** Already answered in [04 · Q12](../python_react/04_Functional_Advanced_Python.md#q12-what-is-an-event-loop-in-asyncio-how-does-asyncawait-work) — read it there.
+**Answer:** Awaiting one after another runs them **sequentially**. Use `asyncio.gather()` or tasks to run them concurrently.
+
+```python
+async def main():
+    # sequential: ~3 seconds
+    a = await fetch_user(1); b = await fetch_user(2); c = await fetch_user(3)
+
+    # concurrent: ~1 second
+    a, b, c = await asyncio.gather(fetch_user(1), fetch_user(2), fetch_user(3))
+
+    # create_task: start now, await later
+    task = asyncio.create_task(fetch_user(4))
+    do_other_work()
+    d = await task
+```
 
 ---
 
@@ -424,6 +472,8 @@ async def main():
         r = await client.get("https://api.example.com/items")
 ```
 
+**Related:** [Fundamentals · Q23](./01_Fundamentals.md#q23) — What is the `with` statement and context managers?
+
 ---
 
 <a name="q31"></a>
@@ -470,8 +520,14 @@ async def main(items):
 
 <a name="q33"></a>
 ## Q33. (Medium) What is the difference between threads and asyncio?
-**Answer:** Already answered in [04 · Q13](../python_react/04_Functional_Advanced_Python.md#q13-what-is-a-coroutine-how-is-it-different-from-a-thread) — read it there.
-**Extra (not in that answer):** Key line for interviews: threads are switched **preemptively** (any time → need locks); asyncio switches **cooperatively** only at `await`.
+**Answer:**
+| | Threads | asyncio |
+|---|---|---|
+| Switching | **Preemptive** — the OS/interpreter can switch at any point | **Cooperative** — switches only at `await` |
+| Race conditions | Anywhere → need locks | Only across `await` points → fewer bugs |
+| Scale | Hundreds of threads (memory per thread) | Tens of thousands of tasks (cheap) |
+| Libraries | Works with any blocking library | Needs async libraries (or `to_thread`) |
+| CPU work | Limited by GIL | Blocks the loop — offload it |
 
 ---
 
@@ -493,7 +549,7 @@ async def main(items):
 
 ---
 
-## Part E — Scenario Questions
+## Part E — Scenario questions
 
 <a name="q36"></a>
 ## Q36. (Medium) A web API must resize uploaded images (CPU-heavy). How do you design it?
@@ -516,141 +572,3 @@ async def main(items):
 4. Fix: consistent lock ordering, timeouts on every I/O call, no blocking calls in async code.
 
 ---
-
-## Part F — Memory Management
-
-<a name="q39"></a>
-## Q39. (Medium) How does Python manage memory?
-**Answer:** Already answered in [01 · Q31](../python_react/01_Python_Fundamentals.md#q31-what-is-pythons-memory-management-model) — read it there.
-**Extra (not in that answer):** Small objects come from **pymalloc** (arenas → pools → blocks); see Q53 for why memory isn't always returned to the OS.
-
----
-
-<a name="q40"></a>
-## Q40. (Easy) What is reference counting?
-**Answer:** Already answered in [01 · Q31](../python_react/01_Python_Fundamentals.md#q31-what-is-pythons-memory-management-model) — read it there.
-
----
-
-<a name="q41"></a>
-## Q41. (Medium) Why does Python need a garbage collector if it has reference counting?
-**Answer:** Already answered in [01 · Q32](../python_react/01_Python_Fundamentals.md#q32-what-is-a-circular-reference-how-does-python-handle-it) — read it there.
-
----
-
-<a name="q42"></a>
-## Q42. (Medium) How does the generational garbage collector work?
-**Answer:** Already answered in [01 · Q32](../python_react/01_Python_Fundamentals.md#q32-what-is-a-circular-reference-how-does-python-handle-it) — read it there.
-**Extra (not in that answer):** Python 3.14 replaced the classic 3-generation collector with an **incremental** GC (young + old generations) to shorten pauses.
-
----
-
-<a name="q43"></a>
-## Q43. (Medium) What can you do with the `gc` module? When would you tune it?
-**Answer:**
-- `gc.collect()` — force a collection (e.g. after freeing a big structure in a batch job).
-- `gc.disable()` / `gc.enable()` — turn off the cyclic GC (reference counting still works).
-- `gc.set_threshold()` — collect less often to reduce overhead in allocation-heavy code.
-- `gc.freeze()` — move existing objects out of GC tracking, used before forking workers to keep copy-on-write memory shared.
-- `gc.get_objects()`, `gc.get_referrers()` — debug what's holding objects.
-Tune only when profiling shows GC pauses or overhead; most apps never need it.
-
----
-
-<a name="q44"></a>
-## Q44. (Medium) What causes memory leaks in Python?
-**Answer:** Python leaks are usually **objects kept alive by references you forgot about**:
-- Global/module-level caches or lists that only grow (unbounded `dict` cache, `lru_cache` without `maxsize`).
-- Objects stored in class attributes or singletons.
-- Event listeners/callbacks never unregistered.
-- Reference cycles involving objects with `__del__` (older Python) or C extensions.
-- Loading huge datasets fully (e.g. `list(queryset)` of millions of rows) in long-running workers.
-- Debug features that store history (Django `DEBUG=True` stores every SQL query).
-
----
-
-<a name="q45"></a>
-## Q45. (Medium) How do you find a memory leak in a Python application?
-**Answer:**
-1. Watch process memory (RSS) over time — steady growth = likely leak.
-2. `tracemalloc` — take two snapshots and compare which lines allocated the most new memory.
-3. `objgraph` / `gc.get_referrers()` — see which object types are growing and what holds them.
-4. `memray` or `py-spy` — profile in production-like runs.
-
-```python
-import tracemalloc
-tracemalloc.start()
-snap1 = tracemalloc.take_snapshot()
-run_suspicious_code()
-snap2 = tracemalloc.take_snapshot()
-for stat in snap2.compare_to(snap1, "lineno")[:5]:
-    print(stat)                # top 5 lines by memory growth
-```
-
----
-
-<a name="q46"></a>
-## Q46. (Medium) What is a weak reference and when do you use it?
-**Answer:** A weak reference (`weakref`) points to an object **without increasing its reference count**, so it doesn't keep the object alive. Used for caches and observer lists where entries should disappear when the object is no longer used elsewhere: `weakref.WeakValueDictionary`, `WeakKeyDictionary`, `WeakSet`.
-
-```python
-import weakref
-cache = weakref.WeakValueDictionary()
-img = load_image("a.png")
-cache["a"] = img
-del img                   # image freed; "a" disappears from the cache automatically
-```
-
----
-
-<a name="q47"></a>
-## Q47. (Medium) What are `__slots__` and how do they save memory?
-**Answer:** Already answered in [01 · Q33](../python_react/01_Python_Fundamentals.md#q33-what-is-__slots__-when-would-you-use-it) — read it there.
-**Extra (not in that answer):** `@dataclass(slots=True)` (3.10+) generates `__slots__` for you.
-
----
-
-<a name="q48"></a>
-## Q48. (Easy) What is integer caching / string interning? What is the difference between `is` and `==`?
-**Answer:** Already answered in [01 · Q1](../python_react/01_Python_Fundamentals.md#q1-what-is-the-difference-between-is-and--in-python) — read it there.
-
----
-
-<a name="q49"></a>
-## Q49. (Easy) What is the difference between shallow copy and deep copy?
-**Answer:** Already answered in [01 · Q11](../python_react/01_Python_Fundamentals.md#q11-what-is-the-difference-between-deepcopy-and-shallow-copy) — read it there.
-
----
-
-<a name="q50"></a>
-## Q50. (Medium) Does `sys.getsizeof()` show the real memory used by an object?
-**Answer:** No — it's **shallow**: it returns the size of the object itself, not the objects it references. A list's size doesn't include its elements. For the real total, walk the references recursively or use tools like `pympler.asizeof` or `tracemalloc`.
-
-```python
-sys.getsizeof([1, 2, 3])               # ~88 bytes: just the list (pointer array)
-sys.getsizeof(["x" * 10_000] * 3)      # same small number — the big string isn't counted
-```
-
----
-
-<a name="q51"></a>
-## Q51. (Easy) How do generators help with memory?
-**Answer:** Already answered in [04 · Q2](../python_react/04_Functional_Advanced_Python.md#q2-what-is-a-generator-how-is-it-different-from-a-regular-function) and [04 · Q5](../python_react/04_Functional_Advanced_Python.md#q5-what-is-a-generator-expression-vs-a-list-comprehension) — read it there.
-
----
-
-<a name="q52"></a>
-## Q52. (Medium) What is `__del__` and why should you be careful with it?
-**Answer:** `__del__` is a finalizer called when the object is about to be destroyed. Problems: you don't control **when** it runs (with cycles it waits for the GC; at interpreter shutdown it may not run at all), exceptions in it are ignored, and it can accidentally resurrect objects. For cleanup use **context managers** (`with`) or `weakref.finalize` instead.
-
----
-
-<a name="q53"></a>
-## Q53. (Hard) Does Python release memory back to the operating system?
-**Answer:** Not always. Freed small objects return to pymalloc's pools for reuse **inside** the process; an arena is returned to the OS only when it's completely empty. With fragmentation (a few live objects scattered across many arenas), the process memory (RSS) stays high even after you delete data. Large objects allocated by `malloc` are usually returned. In long-running workers, recycle processes periodically (e.g. Gunicorn `max_requests`, Celery `worker_max_tasks_per_child`).
-
----
-
-<a name="q54"></a>
-## Q54. (Hard) How does memory behave with multiprocessing and `fork` (copy-on-write)?
-**Answer:** With `fork`, the child shares the parent's memory pages until one of them writes to a page (**copy-on-write**). In Python, even *reading* an object updates its reference count (a write), so pages get copied anyway and memory usage grows in each worker. Mitigations: load shared data before forking and call `gc.freeze()` (as Gunicorn/Instagram do), keep large data in NumPy arrays or `shared_memory` (no per-object refcounts), or load data lazily per worker.
