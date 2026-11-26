@@ -104,8 +104,8 @@ Format: `<a name="qN"></a>` + `## QN. ⭐… <Q>` + `**Answer:**`, `---` between
 
 ---
 
-### `Python/` (topic deep-dives, booklet style) — 1 file, **54 Q**
-`01_Concurrency_and_Memory.md`: Part A GIL & basics · B threading · C multiprocessing · D asyncio/async-await · E scenarios · F memory management & GC. Format: `<a name="qN"></a>` + `## QN. (Easy|Medium|Hard) <Q>` + `**Answer:**` + small example, TOC at top. Separate from `python_react/` (don't duplicate there). New topic files go here as `02_...md` and get a row in `Python/README.md`.
+### `Python/` (topic deep-dives, booklet style) — 2 files, **59 new Q** (+ links to existing `python_react/` questions)
+`01_Concurrency_and_Memory.md` (54 headings: 36 new, 18 link to `python_react/01,04` with an optional "Extra" line): Part A GIL & basics · B threading · C multiprocessing · D asyncio/async-await · E scenarios · F memory management & GC. Format: `<a name="qN"></a>` + `## QN. (Easy|Medium|Hard) <Q>` + `**Answer:**` + small example, TOC at top. Separate from `python_react/` (don't duplicate there). `02_OOP_and_Decorators.md` (23 new Q): Part A = link tables to existing `python_react/01,03,04` questions (no duplication), Part B OOP, Part C decorators. **Rule for new Python files: check `python_react/` first and link existing questions (GitHub heading slugs) instead of rewriting them.** New topic files go here as `03_...md` and get a row in `Python/README.md`.
 
 ---
 
