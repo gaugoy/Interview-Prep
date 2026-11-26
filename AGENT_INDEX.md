@@ -24,7 +24,7 @@ _Last updated: 2026-11-26 (Module 06 rewritten + 4 new Qs; django/index.md count
 
 **Cheap path to "what already exists" (no full-folder scan):**
 - `django/` questions → the title list in section 3 below (or `grep '^## Q' django/*.md`).
-- `Django ORM/` questions → **`Django ORM/Question_Bank.md`** is the canonical flat list of all 704. Read that one file, not the 20 modules.
+- `Django ORM/` questions → **`Django ORM/Question_Bank.md`** is the canonical flat list of all 705. Read that one file, not the 20 modules.
 
 ---
 
@@ -65,11 +65,13 @@ Keep the top Table of Contents + anchors in sync; order easy→hard. ⭐ = rare,
 - **02_Django_ORM.md — 18 Q:** Fields/model creation · Relationships · QuerySet API/chaining · Filtering/lookups · Q objects · Aggregation/annotation · select_related/prefetch_related · N+1 · Raw SQL · Transactions · Custom managers/QuerySets · Migrations · Indexing · F-expressions/atomic updates · Model inheritance · Bulk ops · QuerySet evaluation/caching · values/values_list/defer/only.
 - **03_DRF.md — 18 Q:** DRF components · Serializers/ModelSerializer · Nested/writable · Custom validation · APIView/GenericAPIView/ViewSet · Routers · Auth methods · JWT · Permissions · Throttling · Pagination · Filtering/search/order · Versioning · Renderers/parsers · Testing · CRUD build · Exception handling · Settings.
 
-### `Django ORM/` (deep set) — 20 modules = **704 Q** (35 each; Module 06 has 39)
+### `Django ORM/` (deep set) — 20 modules = **705 Q** (35 each; Module 06 has 39, Module 08 has 36)
 Canonical titles live in `Django ORM/Question_Bank.md`. Modules:
 01 ORM Fundamentals · 02 Model Design · 03 Field Types · 04 Model Meta Options · 05 Managers & QuerySets · 06 Query Optimization · 07 Relationships · 08 Transactions · 09 Aggregation & Annotation · 10 Subquery & Exists · 11 Database Functions · 12 Indexing · 13 Migrations · 14 Multi-Database · 15 Concurrency · 16 Scaling Strategies · 17 ORM Internals · 18 Architecture Questions · 19 Production Issues · 20 Lead-Level Scenarios.
 
 **Module 06 additions (Q36–Q39):** N+1 regression tests in CI (`assertNumQueries`/`CaptureQueriesContext`, flat-count tests) · N+1 in DRF serializers (`setup_eager_loading`, annotations instead of `SerializerMethodField`) · duplicate rows from multi-valued joins, `distinct()` cost vs `Exists` · sync jobs without per-row `get()`/`update_or_create()` (`in_bulk`, diff, `bulk_create(update_conflicts=True)`). Don't re-add these concepts elsewhere.
+
+**Module 08 Q36 (ACID properties)** — a question asked in the candidate's real interview; short answer exists in `Django ORM Short/08_Transactions.md`, long version in `Django ORM/08_Transactions.md` still pending (add it when the long 08 is rewritten). Real interview questions are tracked in root `My_Interview_Questions.md` and marked "⭐ Asked in my interview" in their heading.
 
 ### Long-answer rewrite progress (PROMPTS.md "Django" bucket — one file per run, in this order)
 Audit finding (2026-11-26): the original `Django ORM/` answers are 100% templated (identical "Internal Mechanics" sentence, `XxxScenarioNNN` models, SQL unrelated to the question, generic mistakes/scaling text). Every module in ⏳ state needs a **full per-question rewrite** — expect all 35 answers to be weak.
@@ -92,7 +94,7 @@ Audit finding (2026-11-26): the original `Django ORM/` answers are 100% template
 ### Short-answer progress (PROMPTS.md "Django Short" bucket → `Django ORM Short/`, 2–3 modules per run)
 Independent of the long rewrite: short answers are written fresh from `Django ORM/Question_Bank.md` titles. The long files in `Django ORM/` are never edited by this bucket.
 
-**Status: ✅ all 20 modules done (704 Q, 2026-11-26)** — titles and numbering validated against `Django ORM/Question_Bank.md`. Future "Django Short" runs: only add short versions of new questions added to the long set, or fix errors.
+**Status: ✅ all 20 modules done (705 Q, 2026-11-26)** — titles and numbering validated against `Django ORM/Question_Bank.md`. Future "Django Short" runs: only add short versions of new questions added to the long set, or fix errors.
 
 Short format: `<a name="qN"></a>` + `## QN. (Easy|Medium|Hard) <Question>` + `**Answer:**` (+ optional one-line `**Follow-up:**` / `**Gotcha:**`), `---` between questions, TOC at top. Depth rules: PROMPTS.md → BUCKET: Django Short.
 
