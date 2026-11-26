@@ -7,7 +7,7 @@
 > **After you add or change questions, update this file** (counts + any new topics) in
 > the same run.
 
-_Last updated: 2026-11-26 (Module 06 rewritten + 4 new Qs; django/index.md counts fixed; new `Django DRF/` set, 131 Q; `Django ORM Short/` complete — 20 modules, 704 Q) · Scope: Django interview prep only._
+_Last updated: 2026-11-26 (Module 06 rewritten + 4 new Qs; django/index.md counts fixed; new `Django DRF/` set, 131 Q; `Django ORM Short/` complete; new `Python/` concurrency & memory file) · Scope: Django interview prep only._
 
 ---
 
@@ -101,6 +101,11 @@ Short format: `<a name="qN"></a>` + `## QN. (Easy|Medium|Hard) <Question>` + `**
 ### `Django DRF/` (quick-revision set) — 16 sections, **131 Q**
 Canonical list: `Django DRF/Question_Bank.md` (generated from the `## QN.` headings). Sections: 01 Basics & Request/Response (13) · 02 Serializers (15) · 03 Validation (9) · 04 Relations & Nested (8) · 05 Views & ViewSets (12) · 06 Routers (5) · 07 Authentication/JWT/OAuth2 (11) · 08 Permissions (8) · 09 Throttling (4) · 10 Pagination (5) · 11 Filtering/Search/Ordering (5) · 12 Versioning/Parsers/File upload (5) · 13 Exception handling (5) · 14 Testing (5) · 15 Performance & Caching (6) · 16 Scenario-based & production issues (15).
 Format: `<a name="qN"></a>` + `## QN. ⭐… <Q>` + `**Answer:**`, `---` between questions, TOC at top. Depth rules live in `PROMPTS.md` → BUCKET: DRF. Overlaps with `django/03_DRF.md` (18 Q, older compact set) are intentional; don't edit that file from the DRF bucket.
+
+---
+
+### `Python/` (topic deep-dives, booklet style) — 1 file, **54 Q**
+`01_Concurrency_and_Memory.md`: Part A GIL & basics · B threading · C multiprocessing · D asyncio/async-await · E scenarios · F memory management & GC. Format: `<a name="qN"></a>` + `## QN. (Easy|Medium|Hard) <Q>` + `**Answer:**` + small example, TOC at top. Separate from `python_react/` (don't duplicate there). New topic files go here as `02_...md` and get a row in `Python/README.md`.
 
 ---
 

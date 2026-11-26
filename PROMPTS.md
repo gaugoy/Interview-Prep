@@ -17,6 +17,7 @@ index files up to date after editing.
 | **DRF** | DRF quick-revision set (light answers) | `Django DRF/` (+ `Question_Bank.md`, `README.md`) | ✅ READY |
 | React | React interview prep | `python_react/07–13` (+ `python_react/00_INDEX.md`) | ⬜ TODO |
 | Python | Python interview prep | `python_react/01–06` (+ `00_INDEX.md`) | ⬜ TODO |
+| (no bucket yet) | Python deep-dive topics | `Python/` (01 Concurrency & Memory, + `README.md`) | ✅ content added 2026-11-26 — same booklet style as Django Short |
 
 > To add a future bucket (React/Python/etc.), copy the Django bucket (long answers) or the
 > Django Short / DRF buckets (booklet-style ANSWER DEPTH rules), swap the SCOPE and file
