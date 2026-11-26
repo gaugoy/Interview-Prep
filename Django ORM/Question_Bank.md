@@ -1,6 +1,6 @@
 # Django ORM Master Question Bank (Questions Only)
 
-This document lists all 700 senior, lead, and architect-level Django ORM interview questions, organized by module.
+This document lists all 704 senior, lead, and architect-level Django ORM interview questions, organized by module (modules have 35 questions each, except Module 06 which has 39).
 
 ---
 
@@ -241,6 +241,10 @@ This document lists all 700 senior, lead, and architect-level Django ORM intervi
 33. How do you write a custom QuerySet iterator for fast object parsing?
 34. Explain the performance cost of prefetching polymorphic models.
 35. How do you identify slow Django queries using PostgreSQL pg_stat_statements?
+36. How do you catch and prevent N+1 query regressions automatically in tests and CI?
+37. How do you eliminate N+1 queries in DRF serializers (nested serializers, SerializerMethodField, source='fk.field')?
+38. Why does filtering across a multi-valued relationship return duplicate rows, and what is the cost of distinct() versus Exists?
+39. How do you avoid per-row get() or update_or_create() calls in data-sync jobs (in_bulk, dictionary lookups, bulk upserts)?
 
 ---
 

@@ -25,37 +25,39 @@ Focuses on system architecture, high-scale database systems, query compilation, 
 
 ## 📊 Modules & Folder Structure
 
-All **700+ questions** are 100% unique (no duplicate concepts, answer structures, code examples, or production scenarios) and follow a mandatory 12-section structure mapping to official Django 5.0 mechanisms.
+All **704 questions** are 100% unique (no duplicate concepts) and follow a mandatory 12-section structure mapped to Django 5.x behaviour.
 
-| Module | Filename | Primary Target Audience | Questions Count | Status |
+**Rewrite status:** modules marked ✅ have been rewritten to the interview-ready answer standard — each `# Answer` opens with a ~30–45 sec **spoken answer**, `# Production Scenario` is a STAR story grounded in the PNI Hub stack (replace every `[fill-in]` with your real metric), `# Performance Impact` holds trade-offs / when-not-to, and `# Common Mistakes` lists the wrong answers interviewers hear. Modules marked ⏳ still contain the original templated answers and are queued for rewrite (see `AGENT_INDEX.md` §3).
+
+| Module | Filename | Primary Target Audience | Questions Count | Rewrite Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **01** | [01_ORM_Fundamentals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/01_ORM_Fundamentals.md) | Fundamental to Senior | 35 | Completed |
-| **02** | [02_Model_Design.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/02_Model_Design.md) | Senior | 35 | Completed |
-| **03** | [03_Field_Types.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/03_Field_Types.md) | Senior | 35 | Completed |
-| **04** | [04_Model_Meta_Options.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/04_Model_Meta_Options.md) | Senior | 35 | Completed |
-| **05** | [05_Managers_and_QuerySets.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/05_Managers_and_QuerySets.md) | Senior / Lead | 35 | Completed |
-| **06** | [06_Query_Optimization.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/06_Query_Optimization.md) | Senior / Lead | 35 | Completed |
-| **07** | [07_Relationships.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/07_Relationships.md) | Senior | 35 | Completed |
-| **08** | [08_Transactions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/08_Transactions.md) | Senior / Lead | 35 | Completed |
-| **09** | [09_Aggregation_and_Annotation.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/09_Aggregation_and_Annotation.md) | Senior / Lead | 35 | Completed |
-| **10** | [10_Subquery_and_Exists.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/10_Subquery_and_Exists.md) | Senior / Lead | 35 | Completed |
-| **11** | [11_Database_Functions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/11_Database_Functions.md) | Senior | 35 | Completed |
-| **12** | [12_Indexing.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/12_Indexing.md) | Senior / Lead | 35 | Completed |
-| **13** | [13_Migrations.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/13_Migrations.md) | Senior / Lead | 35 | Completed |
-| **14** | [14_Multi_Database.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/14_Multi_Database.md) | Lead / Architect | 35 | Completed |
-| **15** | [15_Concurrency.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/15_Concurrency.md) | Lead / Architect | 35 | Completed |
-| **16** | [16_Scaling_Strategies.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/16_Scaling_Strategies.md) | Lead / Architect | 35 | Completed |
-| **17** | [17_ORM_Internals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/17_ORM_Internals.md) | Lead / Architect | 35 | Completed |
-| **18** | [18_Architecture_Questions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/18_Architecture_Questions.md) | Lead / Architect | 35 | Completed |
-| **19** | [19_Production_Issues.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/19_Production_Issues.md) | Lead / Architect | 35 | Completed |
-| **20** | [20_Lead_Level_Scenarios.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/20_Lead_Level_Scenarios.md) | Lead / Architect | 35 | Completed |
+| **01** | [01_ORM_Fundamentals.md](./01_ORM_Fundamentals.md) | Fundamental to Senior | 35 | ⏳ Pending rewrite |
+| **02** | [02_Model_Design.md](./02_Model_Design.md) | Senior | 35 | ⏳ Pending rewrite |
+| **03** | [03_Field_Types.md](./03_Field_Types.md) | Senior | 35 | ⏳ Pending rewrite |
+| **04** | [04_Model_Meta_Options.md](./04_Model_Meta_Options.md) | Senior | 35 | ⏳ Pending rewrite |
+| **05** | [05_Managers_and_QuerySets.md](./05_Managers_and_QuerySets.md) | Senior / Lead | 35 | ⏳ Pending rewrite |
+| **06** | [06_Query_Optimization.md](./06_Query_Optimization.md) | Senior / Lead | 39 | ✅ Interview-ready (rewritten 2026-11-26) |
+| **07** | [07_Relationships.md](./07_Relationships.md) | Senior | 35 | ⏳ Pending rewrite |
+| **08** | [08_Transactions.md](./08_Transactions.md) | Senior / Lead | 35 | ⏳ Pending rewrite |
+| **09** | [09_Aggregation_and_Annotation.md](./09_Aggregation_and_Annotation.md) | Senior / Lead | 35 | ⏳ Pending rewrite |
+| **10** | [10_Subquery_and_Exists.md](./10_Subquery_and_Exists.md) | Senior / Lead | 35 | ⏳ Pending rewrite |
+| **11** | [11_Database_Functions.md](./11_Database_Functions.md) | Senior | 35 | ⏳ Pending rewrite |
+| **12** | [12_Indexing.md](./12_Indexing.md) | Senior / Lead | 35 | ⏳ Pending rewrite |
+| **13** | [13_Migrations.md](./13_Migrations.md) | Senior / Lead | 35 | ⏳ Pending rewrite |
+| **14** | [14_Multi_Database.md](./14_Multi_Database.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
+| **15** | [15_Concurrency.md](./15_Concurrency.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
+| **16** | [16_Scaling_Strategies.md](./16_Scaling_Strategies.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
+| **17** | [17_ORM_Internals.md](./17_ORM_Internals.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
+| **18** | [18_Architecture_Questions.md](./18_Architecture_Questions.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
+| **19** | [19_Production_Issues.md](./19_Production_Issues.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
+| **20** | [20_Lead_Level_Scenarios.md](./20_Lead_Level_Scenarios.md) | Lead / Architect | 35 | ⏳ Pending rewrite |
 
 ---
 
 ## 🔥 Most Frequently Asked Interview Questions
 
-1. **How does Django QuerySet lazy evaluation work internally?** (See [01_ORM_Fundamentals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/01_ORM_Fundamentals.md))
-2. **What is the difference between `select_related` and `prefetch_related` and when does prefetch write a new query?** (See [06_Query_Optimization.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/06_Query_Optimization.md))
-3. **How does `transaction.atomic` manage database savepoints under the hood?** (See [08_Transactions.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/08_Transactions.md))
-4. **How do you safely migrate a 2TB table with zero downtime in production?** (See [20_Lead_Level_Scenarios.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/20_Lead_Level_Scenarios.md))
-5. **How does the Query Compiler translate ORM syntax into SQL?** (See [17_ORM_Internals.md](file:///Users/gauravgoyal/antigravity_project/Django%20ORM/17_ORM_Internals.md))
+1. **How does Django QuerySet lazy evaluation work internally?** (See [01_ORM_Fundamentals.md](./01_ORM_Fundamentals.md))
+2. **What is the difference between `select_related` and `prefetch_related` and when does prefetch write a new query?** (See [06_Query_Optimization.md](./06_Query_Optimization.md))
+3. **How does `transaction.atomic` manage database savepoints under the hood?** (See [08_Transactions.md](./08_Transactions.md))
+4. **How do you safely migrate a 2TB table with zero downtime in production?** (See [20_Lead_Level_Scenarios.md](./20_Lead_Level_Scenarios.md))
+5. **How does the Query Compiler translate ORM syntax into SQL?** (See [17_ORM_Internals.md](./17_ORM_Internals.md))
