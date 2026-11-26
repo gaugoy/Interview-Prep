@@ -17,6 +17,7 @@ the stack's index, and **only** the question block it needs.
 | Audit one file | `Django: audit Django ORM/08_Transactions.md` | read that file → audit report → rewrite weak answers |
 | Continue the queue | `Django` / `Django Short` / `Python` / `React` (just the name) | take the next ⏳ item from AGENT_INDEX for that stack |
 | New topic file | `Python: new topic "<name>" with questions on <list>` | create `NN_<Name>.md` in the standard format + README row + bank |
+| Preview release notes | `show release notes since <tag>` | `python3 tools/release_notes.py --from-ref <tag>` (CI publishes them as a GitHub Release on push to `main`) |
 | Commit & push | `commit and push` | branch if on `main`, one commit per module/topic, push, PR link |
 
 **Tips for cheaper, better runs**
