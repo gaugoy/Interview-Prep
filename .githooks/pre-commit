@@ -8,5 +8,5 @@ if ! git diff --cached --name-only | grep -qE '\.md$|^tools/|^src/app/parser\.py
   exit 0
 fi
 python3 tools/build_index.py >/dev/null
-git add index/catalog.json index/INDEX.md AGENT_INDEX.md
+git add index/catalog.json index/INDEX.md AGENT_INDEX.md README.md
 python3 tools/validate.py | grep -E "^ERROR|error\(s\)"

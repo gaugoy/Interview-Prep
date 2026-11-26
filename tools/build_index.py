@@ -6,6 +6,7 @@ Outputs (all generated — never edit by hand):
                        lines, asked, status, words, code_lines, related ids)
   index/INDEX.md       small human/agent-readable counts table
   AGENT_INDEX.md       the block between <!-- AUTO:COUNTS:START --> / END markers
+  README.md            live blocks: contents table + counts, at-a-glance, question badge
 
 Usage:
   python3 tools/build_index.py           # write outputs
@@ -20,6 +21,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from catalog import ROOT, STACKS, load
+from readme_gen import README, render_readme
 
 INDEX_DIR = ROOT / "index"
 CATALOG = INDEX_DIR / "catalog.json"
@@ -82,9 +84,12 @@ def main() -> int:
 
     questions, _ = load()
     catalog, summary, block = render(questions)
+    readme = render_readme(questions)
     ai_old = AGENT_INDEX.read_text(encoding="utf-8")
     ai_new = updated_agent_index(ai_old, block)
     targets = {CATALOG: catalog, SUMMARY: summary, AGENT_INDEX: ai_new}
+    if readme is not None:
+        targets[README] = readme          # deterministic now → part of --check too
 
     if args.check:
         stale = [p for p, content in targets.items() if not p.exists() or p.read_text(encoding="utf-8") != content]
@@ -107,7 +112,7 @@ def main() -> int:
     for p, content in targets.items():
         if not p.exists() or p.read_text(encoding="utf-8") != content:
             p.write_text(content, encoding="utf-8")
-    print(f"Indexed {len(questions)} questions → index/catalog.json, index/INDEX.md, AGENT_INDEX.md counts.")
+    print(f"Indexed {len(questions)} questions → index/catalog.json, INDEX.md, AGENT_INDEX.md counts, README.md counts.")
     return 0
 
 

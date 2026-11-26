@@ -16,7 +16,7 @@
 ## 2. Scope
 Edit only the folders listed in the active stack file, plus `AGENT_INDEX.md` and the stack's
 index files. Never edit another stack's folder. Never touch: `pandas.md`, `Linked_list.py`,
-`Fractal_AI_*`, root `README.md`, `venv/`, `src/`, `run.sh`.
+`Fractal_AI_*`, `venv/`, `src/`, `run.sh`. Root `README.md` and `LICENSE` only when I ask — and never hand-edit the README's `<!-- AUTO:… -->` count blocks (`tools/build_index.py` regenerates them). "What changed" is never written into the README — it's published as a GitHub Release (`tools/release_notes.py`) on every push to `main`.
 
 ## 3. Answer quality (all stacks)
 - Every answer must be **explainable out loud** — plain-English theory first; code supports it.

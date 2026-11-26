@@ -8,6 +8,7 @@ Pure standard library: runs in CI without installing FastAPI.
 """
 from __future__ import annotations
 
+import hashlib
 import re
 import sys
 from dataclasses import dataclass, field
@@ -39,7 +40,7 @@ REVIEWED_FILES = {"Django ORM/06_Query_Optimization.md"}
 #: files / folders that are not question content (indexes, READMEs, banks)
 META_NAMES = {"README.md", "Question_Bank.md", "index.md", "00_INDEX.md"}
 #: root-level files that are content-adjacent and should be link-checked
-LINK_CHECK_ROOT_FILES = ["PROMPTS.md", "AGENT_INDEX.md", "CLAUDE.md", "My_Interview_Questions.md"]
+LINK_CHECK_ROOT_FILES = ["README.md", "PROMPTS.md", "AGENT_INDEX.md", "CLAUDE.md", "My_Interview_Questions.md"]
 
 ANCHOR_RE = re.compile(r'^<a name="(q\d+)"></a>\s*$')
 LINK_RE = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)\s]+)\)")
@@ -65,6 +66,7 @@ class Question:
     status: str
     words: int           # prose words (outside code fences)
     code_lines: int
+    hash: str            # content hash of the answer (detects "updated" in release notes)
     links: list[str] = field(default_factory=list)   # raw link targets inside the answer
     related: list[str] = field(default_factory=list)  # resolved question ids
 
@@ -105,6 +107,7 @@ def load(root: Path = ROOT) -> tuple[list[Question], dict[str, object]]:
                 anchor=m.group(1) if m else None, line_start=q.line_start, line_end=q.line_end,
                 asked=bool(ASKED_RE.search(q.title)), status=status,
                 words=len(re.findall(r"\w+", prose)), code_lines=code_lines,
+                hash=hashlib.sha1(q.markdown.strip().encode()).hexdigest()[:12],
                 links=[t for _, t in LINK_RE.findall(q.markdown)],
             ))
     _resolve_related(questions)
