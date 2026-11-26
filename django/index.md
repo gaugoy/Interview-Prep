@@ -8,38 +8,42 @@
 
 | # | Section | Topics Covered | Questions |
 |---|---------|---------------|-----------|
-| 01 | [Django Core Concepts](./01_Django_Core.md) | MVT, URLs, Views, Templates, Forms, Auth, Middleware, Signals, Admin | 30 |
-| 02 | [Django ORM](./02_Django_ORM.md) | Models, QuerySets, Relationships, Aggregation, Optimization, Migrations | 25 |
-| 03 | [Django REST Framework](./03_DRF.md) | Serializers, ViewSets, Auth, Permissions, Pagination, Testing | 25 |
+| 01 | [Django Core Concepts](./01_Django_Core.md) | MVT, URLs, Views, Templates, Forms, Auth, Middleware, Signals, Admin, Security, Lifecycle | 20 |
+| 02 | [Django ORM](./02_Django_ORM.md) | Models, QuerySets, Relationships, Aggregation, Optimization, Transactions, Migrations | 18 |
+| 03 | [Django REST Framework](./03_DRF.md) | Serializers, ViewSets, Auth/JWT, Permissions, Throttling, Pagination, Testing | 18 |
 
-**Total: 80 questions with detailed answers and code examples**
+**Total: 56 questions with detailed answers and code examples**
+
+> **Going deeper:** the Senior/Lead-level ORM set lives in [`../Django ORM/`](../Django%20ORM/README.md) (704 questions). Its [06 Query Optimization](../Django%20ORM/06_Query_Optimization.md) module has been rewritten to the interview-ready standard (spoken answer → mechanism → STAR story → trade-offs → wrong answers → follow-ups) and is the best follow-up to ORM Q7, Q8, Q16 and Q18 below.
 
 ---
 
 ## 🎯 Top 20 Most Asked Questions
 
-| Priority | Question | Section |
-|----------|---------|---------|
-| ⭐⭐⭐ | Explain Django's MVT architecture | Core |
-| ⭐⭐⭐ | What is the difference between `select_related` and `prefetch_related`? | ORM |
-| ⭐⭐⭐ | How do serializers work in DRF? | DRF |
-| ⭐⭐⭐ | What is the N+1 query problem and how do you fix it? | ORM |
-| ⭐⭐⭐ | Difference between `APIView`, `GenericAPIView`, and `ViewSet`? | DRF |
-| ⭐⭐⭐ | How does Django authentication work? | Core |
-| ⭐⭐⭐ | What are Django signals? When would you use them? | Core |
-| ⭐⭐⭐ | Explain Django middleware and write a custom one | Core |
-| ⭐⭐⭐ | What is `Q` object? How do you do complex queries? | ORM |
-| ⭐⭐⭐ | How do you implement JWT authentication in DRF? | DRF |
-| ⭐⭐ | What are class-based views? Pros and cons vs FBVs? | Core |
-| ⭐⭐ | How do Django migrations work? | ORM |
-| ⭐⭐ | What is `annotate` vs `aggregate`? | ORM |
-| ⭐⭐ | How do you write custom permissions in DRF? | DRF |
-| ⭐⭐ | What is `prefetch_related` with `Prefetch` object? | ORM |
-| ⭐⭐ | How does Django caching work? | Core |
-| ⭐⭐ | What are custom model managers? | ORM |
-| ⭐⭐ | How do you handle nested serializers? | DRF |
-| ⭐⭐ | What is throttling in DRF? | DRF |
-| ⭐⭐ | How do you optimize Django admin for large datasets? | Core |
+Weighted for a ~7-year Senior Backend / Full-Stack (Django + DRF) interview: ORM performance, transactions and DRF design come up in almost every loop. Stars are each question's own frequency rating.
+
+| # | Priority | Question | Section |
+|---|----------|---------|---------|
+| 1 | ⭐⭐⭐ | [select_related and prefetch_related](./02_Django_ORM.md#q7) | ORM |
+| 2 | ⭐⭐⭐ | [The N+1 Query Problem](./02_Django_ORM.md#q8) | ORM |
+| 3 | ⭐⭐⭐ | [Django Request/Response Lifecycle](./01_Django_Core.md#q20) | Core |
+| 4 | ⭐⭐⭐ | [Explain Django's MVT Architecture](./01_Django_Core.md#q1) | Core |
+| 5 | ⭐⭐⭐ | [Database Transactions](./02_Django_ORM.md#q10) | ORM |
+| 6 | ⭐⭐⭐ | [Serializers and ModelSerializer](./03_DRF.md#q2) | DRF |
+| 7 | ⭐⭐⭐ | [APIView vs GenericAPIView vs ViewSet](./03_DRF.md#q5) | DRF |
+| 8 | ⭐⭐⭐ | [Django Middleware](./01_Django_Core.md#q5) | Core |
+| 9 | ⭐⭐⭐ | [F Expressions and Atomic Updates](./02_Django_ORM.md#q14) | ORM |
+| 10 | ⭐⭐⭐ | [Aggregation and Annotation](./02_Django_ORM.md#q6) | ORM |
+| 11 | ⭐⭐⭐ | [Django Signals](./01_Django_Core.md#q6) | Core |
+| 12 | ⭐⭐⭐ | [Q Objects — Complex Queries](./02_Django_ORM.md#q5) | ORM |
+| 13 | ⭐⭐⭐ | [Django Migrations](./02_Django_ORM.md#q12) | ORM |
+| 14 | ⭐⭐⭐ | [Custom Model Managers and QuerySets](./02_Django_ORM.md#q11) | ORM |
+| 15 | ⭐⭐⭐ | [Permissions and Custom Permission Classes](./03_DRF.md#q9) | DRF |
+| 16 | ⭐⭐⭐ | [JWT Authentication](./03_DRF.md#q8) | DRF |
+| 17 | ⭐⭐⭐ | [Django Authentication System](./01_Django_Core.md#q9) | Core |
+| 18 | ⭐⭐⭐ | [Nested Serializers and Writable Relations](./03_DRF.md#q3) | DRF |
+| 19 | ⭐⭐⭐ | [Django Security Best Practices](./01_Django_Core.md#q16) | Core |
+| 20 | ⭐⭐ | [Django Caching](./01_Django_Core.md#q12) | Core |
 
 ---
 
