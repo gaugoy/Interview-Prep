@@ -3,7 +3,7 @@
 All LangChain and LangGraph interview questions, split by topic, from basics to system design (LangChain 1.x / LangGraph 1.x). Every answer follows the same frame: **the answer → a simple version → how to say it in the interview → how to tie it to your project (P1–P4)**. Difficulty: **(Easy)** · **(Medium)** · **(Hard)**.
 
 - **[Question_Bank.md](./Question_Bank.md)** — every question in one list (fastest way to revise).
-- Hands-on coding rounds live in [`../Python Coding Round/`](../Python%20Coding%20Round/README.md).
+- Hands-on coding rounds will live in a separate `Python Coding Round/` folder (not published yet).
 
 ## Topic files
 
@@ -32,7 +32,7 @@ All LangChain and LangGraph interview questions, split by topic, from basics to 
 
 This guide has 220 questions across 14 topic files, from basics to system design, and every answer is tied to a project on your GenAI CV in Google Drive. Read one topic file a day, say the "How to say it" lines out loud, and fill in the \[bracketed\] numbers before your first interview.
 
-**Hands-on coding round prep:** for the 10 to 15 minute Python coding rounds at service companies (strings, lists, numbers, patterns, dicts, regex), see [Python Coding Round](../Python%20Coding%20Round/README.md).
+**Hands-on coding round prep:** for the 10 to 15 minute Python coding rounds at service companies (strings, lists, numbers, patterns, dicts, regex), see the `Python Coding Round/` folder (not published yet).
 
 **Your four anchor projects** (from "Gaurav Goyal - Senior AI & Full-Stack Engineer (GenAI) CV"):
 
