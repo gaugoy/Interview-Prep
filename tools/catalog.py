@@ -34,9 +34,10 @@ STACKS: dict[str, dict] = {
     "Django ORM":       {"prompt": "prompts/01_django_long.md",  "anchors": False, "answer": False, "code": "warn",  "bank": "Django ORM/Question_Bank.md", "status": "draft"},
     "django":           {"prompt": "prompts/01_django_long.md",  "anchors": True,  "answer": True,  "code": "warn",  "bank": None,                          "status": "draft"},
     "React":            {"prompt": "prompts/05_react.md",        "anchors": False, "answer": False, "code": "off",   "bank": None,                          "status": "draft"},
+    "LangChain LangGraph": {"prompt": "prompts/06_langchain.md", "anchors": True,  "answer": True,  "code": "error", "bank": "LangChain LangGraph/Question_Bank.md", "status": "draft"},
 }
 #: files reviewed to the stack's standard even though the stack default is "draft"
-REVIEWED_FILES = {"Django ORM/06_Query_Optimization.md"}
+REVIEWED_FILES = {"Django ORM/06_Query_Optimization.md", "LangChain LangGraph/06_RAG.md"}
 #: files / folders that are not question content (indexes, READMEs, banks)
 META_NAMES = {"README.md", "Question_Bank.md", "index.md", "00_INDEX.md"}
 #: root-level files that are content-adjacent and should be link-checked

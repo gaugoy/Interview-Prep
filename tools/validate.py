@@ -191,8 +191,8 @@ def main() -> int:
 
 
 def check_banks(questions, rep, in_scope):
-    # Link-style banks (Python, DRF): every question listed once, nothing extra
-    for stack in ("Python", "Django DRF"):
+    # Link-style banks (Python, DRF, LangChain): every question listed once, nothing extra
+    for stack in ("Python", "Django DRF", "LangChain LangGraph"):
         bank = ROOT / STACKS[stack]["bank"]
         qs = [q for q in questions if q.stack == stack]
         if not bank.exists() or not (in_scope(bank.relative_to(ROOT).as_posix()) or any(in_scope(q.file) for q in qs)):
