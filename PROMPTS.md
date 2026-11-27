@@ -12,6 +12,7 @@
 | **DRF** | [`03_drf.md`](./prompts/03_drf.md) | `Django DRF/` | `Django DRF/Question_Bank.md` | ✅ complete |
 | **Python** | [`04_python.md`](./prompts/04_python.md) | `Python/` | `Python/Question_Bank.md`, `Python/README.md` | ✅ (06–08 pending theory review) |
 | **React** | [`05_react.md`](./prompts/05_react.md) | `React/` | `React/00_INDEX.md` | ⬜ restructure pending |
+| **LangChain** / **LangGraph** | [`06_langchain.md`](./prompts/06_langchain.md) | `LangChain LangGraph/` | `LangChain LangGraph/Question_Bank.md`, `LangChain LangGraph/README.md` | 🟡 (06 RAG enriched; rest queued) |
 
 **Shared references:** [`prompts/candidate_profile.md`](./prompts/candidate_profile.md) (who I am — single source) ·
 [`AGENT_INDEX.md`](./AGENT_INDEX.md) (what exists: counts, progress queues) ·
