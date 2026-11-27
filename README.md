@@ -3,13 +3,14 @@
 # 🎯 Interview Prep — Backend & Full-Stack Question Bank
 
 **A personal, continuously-updated interview knowledge base for Senior Backend / Full-Stack engineers —
-Python · Django · Django ORM · DRF · React — with theory-first answers you can say out loud.**
+Python · Django · Django ORM · DRF · React · LangChain · LangGraph — with theory-first answers you can say out loud.**
 
-![Questions](https://img.shields.io/badge/questions-1968-blue?style=for-the-badge)
+![Questions](https://img.shields.io/badge/questions-2188-blue?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.12--3.14-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-5.x-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![DRF](https://img.shields.io/badge/DRF-3.15+-A30000?style=for-the-badge&logo=django&logoColor=white)
 ![React](https://img.shields.io/badge/React-18%2F19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![LangChain](https://img.shields.io/badge/LangChain%20%26%20LangGraph-1.x-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/Viewer-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![License](https://img.shields.io/badge/license-All%20rights%20reserved-lightgrey?style=for-the-badge)
 
@@ -45,13 +46,14 @@ Everything is plain Markdown: readable on GitHub, searchable, version-controlled
 | 🔌 | [**Django REST Framework**](./Django%20DRF/README.md) | Serializers, validation, views & ViewSets, auth/JWT, permissions, throttling, pagination, testing, production scenarios | 131 | ⚡ Quick revision |
 | 🌱 | [**Django (compact)**](./django/index.md) | Core Django, ORM and DRF essentials — the most-asked set | 56 | ⭐ Frequency-ranked |
 | ⚛️ | [**React & Web**](./React/00_INDEX.md) | React fundamentals, hooks, state, performance, architecture, testing, web fundamentals, JavaScript | 156 | 🚧 Restructure planned |
+| 🦜 | [**LangChain & LangGraph**](./LangChain%20LangGraph/README.md) | GenAI: LCEL, prompts, structured output, memory, RAG, tools & agents, LangGraph, checkpointing & HITL, multi-agent, LangSmith, production, system design | 220 | 🤖 GenAI, project-tied answers |
 | 🎯 | **Company guides** | Focused crash plans & theory sheets (e.g. `Fractal_AI_*.md`) | — | Targeted prep |
 
-> 📊 **1968 questions** in total · per-file counts and difficulty mix: [`index/INDEX.md`](./index/INDEX.md)
+> 📊 **2188 questions** in total · per-file counts and difficulty mix: [`index/INDEX.md`](./index/INDEX.md)
 <!-- AUTO:CONTENTS:END -->
 
 <!-- AUTO:GLANCE:START -->
-🟢 **284** easy · 🟡 **724** medium · 🔴 **256** hard · ⚪ 704 untagged · ⭐ **1** asked in my interviews
+🟢 **340** easy · 🟡 **832** medium · 🔴 **312** hard · ⚪ 704 untagged · ⭐ **1** asked in my interviews
 <!-- AUTO:GLANCE:END -->
 
 ---

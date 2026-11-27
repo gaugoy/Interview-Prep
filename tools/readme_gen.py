@@ -40,6 +40,9 @@ SECTIONS = [
     ("⚛️", "React & Web", "React/00_INDEX.md", ["React"], "React",
      "React fundamentals, hooks, state, performance, architecture, testing, web fundamentals, JavaScript",
      "🚧 Restructure planned"),
+    ("🦜", "LangChain & LangGraph", "LangChain LangGraph/README.md", ["LangChain LangGraph"], "LangChain LangGraph",
+     "GenAI: LCEL, prompts, structured output, memory, RAG, tools & agents, LangGraph, checkpointing & HITL, multi-agent, LangSmith, production, system design",
+     "🤖 GenAI, project-tied answers"),
 ]
 STACK_LABEL = {s[4]: s[1] for s in SECTIONS}
 STACK_LABEL["Django ORM"] = "Django ORM — Deep"
